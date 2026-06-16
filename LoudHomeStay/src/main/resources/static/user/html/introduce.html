@@ -1,0 +1,1045 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giới thiệu | LoudBooking</title>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --primary: #3570ef;
+        --primary-hover: #4d78ef;
+        --primary-light: #eef2ff;
+        --secondary: #10b981;
+        --accent: #f59e0b;
+        --bg-body: #f8fafc;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --glass-bg: rgba(255, 255, 255, 0.85);
+        --card-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.05),
+          0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        --radius-lg: 24px;
+        --radius-md: 16px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background: var(--bg-body);
+        color: var(--text-main);
+      }
+
+      .brand-logo {
+        font-family: "Outfit", sans-serif;
+      }
+
+      /* HEADER */
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        padding: 16px 60px;
+      }
+
+      .header-container {
+        max-width: 1400px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .brand-logo {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--primary);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .nav-links {
+        display: flex;
+      }
+
+      .nav-links a {
+        color: var(--text-main);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        padding: 10px 16px;
+        border-radius: 30px;
+        transition: 0.3s;
+      }
+
+      .nav-links a:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 18px;
+        border-radius: 40px;
+        background: var(--primary-light);
+        color: var(--primary);
+        cursor: pointer;
+        transition: 0.3s;
+        position: relative;
+        border: 1px solid #dbeafe;
+      }
+
+      .user-profile:hover {
+        background: #dbeafe;
+      }
+
+      .user-avatar-wrapper {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        flex-shrink: 0;
+        font-weight: 800;
+      }
+
+      .user-avatar-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+      }
+
+      .avatar-initials {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+      }
+
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 12px);
+        right: 0;
+        width: 240px;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid #f1f5f9;
+        z-index: 999;
+      }
+
+      .dropdown-item {
+        width: 100%;
+        border: none;
+        background: none;
+        padding: 14px 18px;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-main);
+        transition: 0.3s;
+      }
+
+      .dropdown-item:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .dropdown-item.logout {
+        color: #ef4444;
+        border-top: 1px solid #f1f5f9;
+      }
+
+      /* SEARCH BAR */
+
+      .top-search-section {
+        padding: 30px 60px;
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .search-container {
+        max-width: 1400px;
+        margin: auto;
+        background: white;
+        padding: 15px;
+        border-radius: var(--radius-md);
+        box-shadow: var(--card-shadow);
+
+        display: grid;
+        grid-template-columns: 2fr 1.2fr 1.2fr 1fr 0.9fr;
+        gap: 12px;
+      }
+
+      .search-box {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 12px 18px;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 1px solid transparent;
+      }
+
+      .search-box:hover {
+        border-color: var(--primary);
+        background: white;
+      }
+
+      .search-box label {
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        letter-spacing: 1px;
+      }
+
+      .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-main);
+      }
+
+      .search-box select {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 15px;
+        color: var(--text-main);
+        margin-top: 8px;
+        cursor: pointer;
+      }
+
+      .btn-search {
+        border: none;
+        border-radius: 12px;
+        background: var(--primary);
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn-search:hover {
+        background: var(--primary-hover);
+      }
+
+      .keyword-box {
+        position: relative;
+      }
+
+      .suggestion-item {
+        padding: 14px 18px;
+        cursor: pointer;
+        transition: 0.2s;
+
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .suggestion-item:hover {
+        background: #f8fafc;
+        color: var(--primary);
+      }
+
+      .suggestion-item i {
+        color: var(--primary);
+      }
+      .hotel-suggestions {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+        overflow-y: auto;
+        max-height: 220px;
+
+        z-index: 999;
+        display: none;
+        border: 1px solid #e2e8f0;
+      }
+
+      /* MAIN */
+      .main-container {
+        max-width: 1400px;
+        margin: 40px auto;
+        padding: 0 60px;
+
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 30px;
+      }
+
+      /* FILTER */
+
+      .filter-section {
+        background: white;
+        border-radius: var(--radius-md);
+        padding: 25px;
+        box-shadow: var(--card-shadow);
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+      }
+
+      .filter-title {
+        font-size: 22px;
+        font-weight: 800;
+        margin-bottom: 25px;
+      }
+
+      .filter-group {
+        margin-bottom: 30px;
+      }
+
+      .filter-group h4 {
+        font-size: 15px;
+        margin-bottom: 15px;
+      }
+
+      .filter-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+
+      .filter-item input {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* PRICE RANGE */
+
+      .price-slider-wrapper {
+        margin-top: 10px;
+      }
+
+      .price-values {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+      }
+
+      #priceRange {
+        width: 100%;
+        appearance: none;
+        height: 6px;
+        border-radius: 999px;
+        background: #dbeafe;
+        outline: none;
+      }
+
+      #priceRange::-webkit-slider-thumb {
+        appearance: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--primary);
+        cursor: pointer;
+        border: 4px solid white;
+        box-shadow: 0 4px 10px rgba(53, 112, 239, 0.35);
+        transition: 0.2s;
+      }
+
+      #priceRange::-webkit-slider-thumb:hover {
+        transform: scale(1.08);
+      }
+
+      .price-current {
+        margin-top: 14px;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .price-current strong {
+        color: var(--primary);
+        font-size: 15px;
+      }
+
+      /* RESULT */
+
+      .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+
+      .results-title h2 {
+        font-size: 30px;
+        font-weight: 800;
+      }
+
+      .results-title p {
+        color: var(--text-muted);
+        margin-top: 6px;
+      }
+
+      .sort-box {
+        background: white;
+        padding: 12px 18px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .sort-box select {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-weight: 600;
+      }
+
+      /* HOTEL CARD */
+
+      .hotel-list {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+      }
+
+      .hotel-card {
+        background: white;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        transition: 0.3s;
+        border: 1px solid #f1f5f9;
+      }
+
+      .hotel-card:hover {
+        transform: translateY(-4px);
+      }
+
+      .hotel-image {
+        position: relative;
+        height: 100%;
+      }
+
+      .hotel-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .rating-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--primary);
+        color: white;
+        padding: 8px 14px;
+        border-radius: 10px;
+        font-weight: 800;
+      }
+
+      .hotel-content {
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .hotel-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .hotel-name {
+        font-size: 26px;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+
+      .hotel-location {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+
+      .hotel-description {
+        color: var(--text-muted);
+        line-height: 1.7;
+        font-size: 14px;
+      }
+
+      .hotel-price {
+        text-align: right;
+      }
+
+      .hotel-price span {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .hotel-price h3 {
+        font-size: 32px;
+        color: var(--primary);
+        margin: 10px 0;
+      }
+
+      .btn-view {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 14px 22px;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn-view:hover {
+        background: var(--primary-hover);
+      }
+
+      .hotel-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid #f1f5f9;
+      }
+
+      .hotel-tags {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        background: var(--primary-light);
+        color: var(--primary);
+        padding: 8px 12px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .review {
+        color: var(--secondary);
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      /* RESPONSIVE */
+
+      @media (max-width: 1200px) {
+        .main-container {
+          grid-template-columns: 1fr;
+        }
+
+        .filter-section {
+          position: static;
+        }
+      }
+
+      @media (max-width: 992px) {
+        header,
+        .top-search-section,
+        .main-container {
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+
+        .search-container {
+          grid-template-columns: 1fr;
+        }
+
+        .hotel-card {
+          grid-template-columns: 1fr;
+        }
+
+        .hotel-image {
+          height: 260px;
+        }
+
+        .hotel-top {
+          flex-direction: column;
+        }
+
+        .hotel-price {
+          text-align: left;
+        }
+      }
+    </style>
+
+    <link rel="stylesheet" href="/css/chatbot.css" />
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <header>
+      <div class="header-container">
+        <a href="home.html" class="brand-logo">
+          <i class="fas fa-paper-plane"></i>
+          LoudBooking
+        </a>
+
+        <div class="nav-actions">
+          <nav class="nav-links">
+            <a href="home.html">Trang chủ</a>
+            <a href="introduce.html">Giới thiệu</a>
+            <a href="voucher.html">Khuyến mãi</a>
+            <a href="bill.html">Đặt phòng của tôi</a>
+          </nav>
+
+          <div class="user-profile" onclick="toggleDropdown()">
+            <div class="user-avatar-wrapper">
+              <img id="userAvatar" src="" alt="Avatar" />
+              <div id="userInitials" class="avatar-initials">U</div>
+            </div>
+
+            <span id="buttonusername">Đăng nhập</span>
+
+            <i class="fas fa-chevron-down" style="font-size: 10px"></i>
+
+            <div id="dropdownMenu" class="dropdown-menu">
+              <button
+                class="dropdown-item"
+                onclick="location.href = 'my-account.html'"
+              >
+                <i class="fas fa-user-circle"></i>
+                Hồ sơ của tôi
+              </button>
+
+              <button
+                class="dropdown-item"
+                onclick="location.href = 'bill.html'"
+              >
+                <i class="fas fa-receipt"></i>
+                Đơn đặt phòng
+              </button>
+
+              <button
+                class="dropdown-item"
+                onclick="location.href = 'chat.html'"
+              >
+                <i class="fas fa-comment-dots"></i>
+                Tin nhắn
+              </button>
+
+              <button class="dropdown-item logout" onclick="logoutUser()">
+                <i class="fas fa-sign-out-alt"></i>
+                Đăng xuất
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+
+    <main class="main-container">
+      <div
+        style="
+          grid-column: 1 / -1;
+          background: white;
+          border-radius: var(--radius-lg);
+          padding: 50px;
+          box-shadow: var(--card-shadow);
+          border: 1px solid #e2e8f0;
+        "
+      >
+        <div style="margin-bottom: 40px">
+          <h1 style="font-size: 40px; font-weight: 800; margin-bottom: 12px">
+            Giới thiệu về LoudBooking
+          </h1>
+
+          <p
+            style="color: var(--text-muted); font-size: 16px; line-height: 1.8"
+          >
+            LoudBooking là nền tảng hỗ trợ tìm kiếm, so sánh và đặt phòng khách
+            sạn trực tuyến, giúp khách hàng dễ dàng lựa chọn nơi lưu trú phù hợp
+            với nhu cầu và ngân sách của mình.
+          </p>
+        </div>
+
+        <!-- I -->
+        <section style="margin-bottom: 50px">
+          <h2
+            style="
+              font-size: 28px;
+              font-weight: 800;
+              margin-bottom: 25px;
+              color: var(--primary);
+            "
+          >
+            I. TẦM NHÌN VÀ SỨ MỆNH
+          </h2>
+
+          <div style="display: flex; flex-direction: column; gap: 28px">
+            <div>
+              <h3 style="font-size: 20px; margin-bottom: 10px">1. Tầm nhìn</h3>
+
+              <p style="color: var(--text-muted); line-height: 1.9">
+                Trở thành nền tảng đặt phòng khách sạn trực tuyến đáng tin cậy,
+                kết nối khách hàng với các khách sạn chất lượng trên toàn quốc,
+                mang đến trải nghiệm đặt phòng nhanh chóng và thuận tiện.
+              </p>
+            </div>
+
+            <div>
+              <h3 style="font-size: 20px; margin-bottom: 10px">2. Sứ mệnh</h3>
+
+              <p style="color: var(--text-muted); line-height: 1.9">
+                Cung cấp giải pháp đặt phòng hiện đại giúp khách hàng dễ dàng
+                tìm kiếm, so sánh giá và đặt phòng trực tuyến, đồng thời hỗ trợ
+                các khách sạn quản lý hoạt động kinh doanh hiệu quả hơn.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- II -->
+        <section style="margin-bottom: 50px">
+          <h2
+            style="
+              font-size: 28px;
+              font-weight: 800;
+              margin-bottom: 25px;
+              color: var(--primary);
+            "
+          >
+            II. NHỮNG GÌ LOUDBOOKING CUNG CẤP
+          </h2>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              gap: 20px;
+            "
+          >
+            <div
+              style="background: #f8fafc; padding: 25px; border-radius: 16px"
+            >
+              <h3 style="margin-bottom: 10px">
+                <i class="fas fa-search-location"></i>
+                Tìm kiếm khách sạn
+              </h3>
+
+              <p style="color: var(--text-muted); line-height: 1.8">
+                Tìm kiếm khách sạn theo địa điểm, ngày lưu trú và số lượng
+                phòng.
+              </p>
+            </div>
+
+            <div
+              style="background: #f8fafc; padding: 25px; border-radius: 16px"
+            >
+              <h3 style="margin-bottom: 10px">
+                <i class="fas fa-bed"></i>
+                Đặt phòng trực tuyến
+              </h3>
+
+              <p style="color: var(--text-muted); line-height: 1.8">
+                Thực hiện đặt phòng nhanh chóng với quy trình đơn giản và trực
+                quan.
+              </p>
+            </div>
+
+            <div
+              style="background: #f8fafc; padding: 25px; border-radius: 16px"
+            >
+              <h3 style="margin-bottom: 10px">
+                <i class="fas fa-percent"></i>
+                Khuyến mãi và voucher
+              </h3>
+
+              <p style="color: var(--text-muted); line-height: 1.8">
+                Áp dụng các chương trình ưu đãi giúp khách hàng tiết kiệm chi
+                phí.
+              </p>
+            </div>
+
+            <div
+              style="background: #f8fafc; padding: 25px; border-radius: 16px"
+            >
+              <h3 style="margin-bottom: 10px">
+                <i class="fas fa-star"></i>
+                Đánh giá khách sạn
+              </h3>
+
+              <p style="color: var(--text-muted); line-height: 1.8">
+                Khách hàng có thể chia sẻ trải nghiệm thực tế sau khi lưu trú.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- III -->
+        <section style="margin-bottom: 50px">
+          <h2
+            style="
+              font-size: 28px;
+              font-weight: 800;
+              margin-bottom: 25px;
+              color: var(--primary);
+            "
+          >
+            III. GIÁ TRỊ CỐT LÕI
+          </h2>
+
+          <ul
+            style="
+              padding-left: 22px;
+              color: var(--text-muted);
+              line-height: 2.2;
+            "
+          >
+            <li>Minh bạch thông tin khách sạn và giá phòng.</li>
+            <li>Đặt phòng nhanh chóng và thuận tiện.</li>
+            <li>Không ngừng nâng cao trải nghiệm người dùng.</li>
+            <li>Đảm bảo tính chính xác và an toàn của dữ liệu.</li>
+            <li>Hỗ trợ khách hàng và khách sạn một cách hiệu quả.</li>
+          </ul>
+        </section>
+
+        <!-- IV -->
+        <section>
+          <h2
+            style="
+              font-size: 28px;
+              font-weight: 800;
+              margin-bottom: 25px;
+              color: var(--primary);
+            "
+          >
+            IV. CAM KẾT CỦA LOUDBOOKING
+          </h2>
+
+          <p style="color: var(--text-muted); line-height: 2">
+            LoudBooking cam kết cung cấp nền tảng đặt phòng trực tuyến ổn định,
+            minh bạch và thân thiện với người dùng. Chúng tôi luôn nỗ lực cải
+            thiện chất lượng dịch vụ nhằm mang đến trải nghiệm đặt phòng tốt
+            nhất cho khách hàng và đối tác khách sạn.
+          </p>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const API_URL = "http://localhost:8080";
+
+      async function loadHotels() {
+        const list = document.getElementById("hotelList");
+
+        const params = getParams();
+
+        await loadHotelOptions();
+
+        document.getElementById("keyword").value = params.keyword;
+        document.getElementById("checkIn").value = params.checkIn;
+        document.getElementById("checkOut").value = params.checkOut;
+        document.getElementById("roomCount").value = params.roomCount;
+
+        document.getElementById("searchInfo").innerHTML = `
+      Tìm thấy khách sạn phù hợp cho ${params.roomCount} phòng
+    `;
+
+        try {
+          const res = await fetch(
+            `${API_URL}/api/hotels/search-available` +
+              `?keyword=${encodeURIComponent(params.keyword)}` +
+              `&checkIn=${params.checkIn}` +
+              `&checkOut=${params.checkOut}` +
+              `&roomCount=${params.roomCount}`,
+          );
+
+          const hotels = await res.json();
+
+          searchedHotels = hotels;
+
+          if (!hotels || hotels.length === 0) {
+            list.innerHTML = `
+          <div style="
+            background:white;
+            padding:60px;
+            border-radius:20px;
+            text-align:center;
+            box-shadow: var(--card-shadow);
+          ">
+            <i class="fas fa-hotel fa-3x" style="color:#cbd5e1;"></i>
+
+            <h3 style="margin-top:20px;">
+              Không có phòng trống phù hợp
+            </h3>
+
+            <p style="margin-top:10px;color:var(--text-muted);">
+              Vui lòng chọn khoảng thời gian khác.
+            </p>
+          </div>
+        `;
+
+            return;
+          }
+
+          renderHotels(hotels);
+        } catch (error) {
+          console.error(error);
+
+          list.innerHTML = `
+        <div style="
+          background:white;
+          padding:60px;
+          border-radius:20px;
+          text-align:center;
+        ">
+          <h3>Không thể kết nối máy chủ</h3>
+          <p style="color:var(--text-muted);margin-top:10px;">${error.message}</p>
+        </div>
+      `;
+        }
+      }
+    </script>
+    <script>
+      function toggleDropdown() {
+        const menu = document.getElementById("dropdownMenu");
+
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      }
+
+      window.onclick = (e) => {
+        if (!e.target.closest(".user-profile")) {
+          const menu = document.getElementById("dropdownMenu");
+
+          if (menu) {
+            menu.style.display = "none";
+          }
+        }
+      };
+
+      function logoutUser() {
+        localStorage.clear();
+        window.location.href = "login.html";
+      }
+
+      function loadUserInfo() {
+        const username = localStorage.getItem("username");
+        const avatar = localStorage.getItem("avatar");
+
+        const userAvatar = document.getElementById("userAvatar");
+        const userInitials = document.getElementById("userInitials");
+
+        if (username) {
+          document.getElementById("buttonusername").innerText = username;
+
+          const initials = username
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .substring(0, 2)
+            .toUpperCase();
+
+          userInitials.innerText = initials;
+        }
+
+        if (avatar && avatar !== "null" && avatar !== "undefined") {
+          userAvatar.src = avatar.startsWith("http")
+            ? avatar
+            : `${API_URL}${avatar}`;
+
+          userAvatar.style.display = "block";
+          userInitials.style.display = "none";
+
+          userAvatar.onerror = () => {
+            userAvatar.style.display = "none";
+            userInitials.style.display = "flex";
+          };
+        } else {
+          userAvatar.style.display = "none";
+          userInitials.style.display = "flex";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadHotels();
+        loadUserInfo();
+        const priceRange = document.getElementById("priceRange");
+        const priceCurrentValue = document.getElementById("priceCurrentValue");
+
+        priceRange.addEventListener("input", () => {
+          const value = Number(priceRange.value);
+
+          priceCurrentValue.innerText = value.toLocaleString("vi-VN") + "đ";
+
+          filterHotelsBySidebar();
+        });
+        document
+          .getElementById("sortSelect")
+          .addEventListener("change", sortHotels);
+        document
+          .querySelectorAll(".rating-filter, .brand-filter")
+          .forEach((checkbox) => {
+            checkbox.addEventListener("change", filterHotelsBySidebar);
+          });
+      });
+    </script>
+
+    <script src="/js/chatbot.js" defer></script>
+  </body>
+</html>

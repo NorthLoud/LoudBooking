@@ -1,0 +1,1848 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LoudBooking | Tìm chỗ nghỉ lý tưởng</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Flatpickr -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/vn.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      :root {
+        --primary: #3570ef;
+        --primary-hover: #4d78ef;
+        --primary-light: #eef2ff;
+        --secondary: #10b981;
+        --accent: #f59e0b;
+        --bg-body: #f8fafc;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --glass-bg: rgba(255, 255, 255, 0.85);
+        --glass-border: rgba(255, 255, 255, 0.3);
+        --card-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.05),
+          0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        --radius-lg: 24px;
+        --radius-md: 16px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+      .brand-logo {
+        font-family: "Outfit", sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-body);
+        color: var(--text-main);
+        overflow-x: hidden;
+      }
+
+      /* --- Header --- */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px 60px;
+        z-index: 1000;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: transparent;
+      }
+
+      header.scrolled {
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        padding: 12px 60px;
+      }
+
+      .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .brand-logo {
+        font-size: 28px;
+        font-weight: 800;
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      header.scrolled .brand-logo {
+        color: var(--primary);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .nav-links {
+        display: flex;
+      }
+
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 15px;
+        transition: 0.3s;
+        padding: 8px 15px;
+        border-radius: 30px;
+      }
+
+      header.scrolled .nav-links a {
+        color: var(--text-main);
+      }
+
+      .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      header.scrolled .nav-links a:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 6px 18px;
+        border-radius: 40px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        position: relative;
+      }
+
+      header.scrolled .user-profile {
+        background: var(--primary-light);
+        color: var(--primary);
+        border-color: transparent;
+      }
+
+      .user-avatar-wrapper {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary-light);
+        color: var(--primary);
+        font-weight: 800;
+        font-size: 14px;
+        flex-shrink: 0;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      header.scrolled .user-avatar-wrapper {
+        background: white;
+        border-color: var(--primary-light);
+      }
+
+      .user-avatar-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+      }
+
+      .avatar-initials {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+      }
+
+      /* Dropdown Menu */
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 15px);
+        right: 0;
+        width: 240px;
+        background: white;
+        border-radius: var(--radius-md);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        animation: slideIn 0.3s ease;
+        border: 1px solid #f1f5f9;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(10px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .dropdown-item {
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--text-main);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: 0.2s;
+        border: none;
+        width: 100%;
+        text-align: left;
+        background: none;
+        cursor: pointer;
+      }
+
+      .dropdown-item:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .dropdown-item.logout {
+        color: #ef4444;
+        border-top: 1px solid #f1f5f9;
+      }
+
+      /* --- Hero Section --- */
+      .hero {
+        height: 85vh;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2)),
+          url("http://localhost:8080/images/image.png");
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+        padding: 0 20px;
+        position: relative;
+      }
+
+      .hero h1 {
+        font-size: 64px;
+        font-weight: 800;
+        margin-bottom: 20px;
+        line-height: 1.1;
+        max-width: 800px;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .hero p {
+        font-size: 20px;
+        opacity: 0.9;
+        max-width: 600px;
+        margin-bottom: 40px;
+      }
+
+      /* --- Search Bar --- */
+      .search-wrapper {
+        width: 100%;
+        max-width: 1100px;
+        position: absolute;
+        bottom: -45px;
+        padding: 0 20px;
+      }
+
+      .search-container {
+        background: white;
+        padding: 15px;
+        border-radius: var(--radius-md);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+        display: grid;
+        grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr 0.8fr;
+        gap: 12px;
+        align-items: center;
+        border: 1px solid #f1f5f9;
+      }
+
+      .search-box {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 12px 18px;
+        background: #f8fafc;
+        border-radius: 12px;
+        transition: 0.3s;
+        cursor: text;
+        border: 1px solid transparent;
+      }
+
+      .search-box:hover {
+        background: white;
+        border-color: var(--primary);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+      }
+
+      .search-box label {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .search-box input {
+        border: none;
+        background: transparent;
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--text-main);
+        outline: none;
+        width: 100%;
+      }
+
+      .search-box select {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 15px;
+        color: var(--text-main);
+        margin-top: 8px;
+        cursor: pointer;
+      }
+
+      /* =========================
+   BOOKING DATEPICKER UI
+========================= */
+      .flatpickr-calendar {
+        width: 300px !important;
+        max-width: 90vw !important;
+        max-height: 500px !important;
+
+        background: #fff !important;
+        border: none !important;
+        border-radius: 22px !important;
+
+        padding: 16px !important;
+
+        box-shadow:
+          0 20px 50px rgba(15, 23, 42, 0.12),
+          0 8px 20px rgba(15, 23, 42, 0.08) !important;
+
+        overflow: hidden;
+      }
+      /* ===== Header ===== */
+
+      .flatpickr-month {
+        height: 64px !important;
+
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .flatpickr-current-month {
+        position: static !important;
+        width: 100%;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 !important;
+        font-size: 17px !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+      }
+
+      .flatpickr-current-month .flatpickr-monthDropdown-months,
+      .flatpickr-current-month input.cur-year {
+        border: none !important;
+        background: transparent !important;
+        font-size: 17px !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        pointer-events: none;
+      }
+      /* ===== Arrow ===== */
+      .flatpickr-prev-month,
+      .flatpickr-next-month {
+        top: 18px !important;
+        width: 38px;
+        height: 38px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: 0.2s;
+      }
+      .flatpickr-prev-month:hover,
+      .flatpickr-next-month:hover {
+        background: #f1f5f9;
+      }
+      .flatpickr-prev-month svg,
+      .flatpickr-next-month svg {
+        width: 16px !important;
+        height: 16px !important;
+        fill: #0f172a !important;
+      }
+      /* ===== Layout tổng ===== */
+      .flatpickr-rContainer {
+        width: 100% !important;
+      }
+      .flatpickr-days {
+        width: 100% !important;
+      }
+      /* QUAN TRỌNG */
+      .flatpickr-innerContainer {
+        display: block !important;
+      }
+      /* ===== Mỗi tháng ===== */
+      .dayContainer {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr);
+        justify-items: center;
+        row-gap: 8px;
+      }
+      /* ===== Weekday ===== */
+      .flatpickr-weekdays {
+        display: block !important;
+      }
+      .flatpickr-weekdaycontainer {
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr);
+        justify-items: center;
+      }
+      .flatpickr-weekday {
+        width: 38px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        color: #334155 !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+      }
+      /* ===== Day ===== */
+      .flatpickr-day {
+        width: 38px !important;
+        max-width: 38px !important;
+
+        height: 38px !important;
+        line-height: 38px !important;
+        margin: 0 !important;
+        border-radius: 12px !important;
+
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        color: #0f172a !important;
+        border: none !important;
+        transition: all 0.2s ease;
+      }
+      /* Hover */
+      .flatpickr-day:hover {
+        background: #eef2ff !important;
+        color: #2563eb !important;
+      }
+      /* Outside month */
+      .flatpickr-day.prevMonthDay,
+      .flatpickr-day.nextMonthDay {
+        color: #94a3b8 !important;
+      }
+      /* Ngày quá khứ */
+      .flatpickr-day.flatpickr-disabled,
+      .flatpickr-day.prevMonthDay.flatpickr-disabled {
+        color: #cbd5e1 !important;
+        opacity: 0.45 !important;
+        cursor: not-allowed !important;
+        background: transparent !important;
+      }
+      /* Today */
+      .flatpickr-day.today {
+        border: 2px solid #2563eb !important;
+        color: #2563eb !important;
+      }
+      /* Selected */
+      .flatpickr-day.selected,
+      .flatpickr-day.startRange,
+      .flatpickr-day.endRange {
+        background: #2563eb !important;
+        color: white !important;
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+      }
+      /* In range */
+      .flatpickr-day.inRange {
+        background: #dbe7ff !important;
+        color: #2563eb !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+      /* Start */
+      .flatpickr-day.startRange {
+        border-radius: 12px 0 0 12px !important;
+      }
+      /* End */
+      .flatpickr-day.endRange {
+        border-radius: 0 12px 12px 0 !important;
+      }
+      /* 1 ngày */
+      .flatpickr-day.startRange.endRange {
+        border-radius: 12px !important;
+      }
+      /* ===== Footer ===== */
+      .custom-flatpickr-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 18px;
+        border-top: 1px solid #e2e8f0;
+      }
+      .custom-flatpickr-footer button {
+        border: none;
+        background: transparent;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .fp-btn-clear {
+        color: #ef4444;
+      }
+      .fp-btn-today {
+        color: #2563eb;
+      }
+
+      .btn-search {
+        background: var(--primary);
+        color: white;
+        border: none;
+        height: 100%;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-search:hover {
+        background: var(--primary-hover);
+        transform: scale(1.02);
+        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+      }
+
+      .keyword-box {
+        position: relative;
+      }
+
+      .hotel-suggestions {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+        overflow-y: auto;
+        max-height: 220px;
+
+        z-index: 999;
+        display: none;
+        border: 1px solid #e2e8f0;
+      }
+
+      .suggestion-item {
+        padding: 14px 18px;
+        cursor: pointer;
+        transition: 0.2s;
+
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .suggestion-item:hover {
+        background: #f8fafc;
+        color: var(--primary);
+      }
+
+      .suggestion-item i {
+        color: var(--primary);
+      }
+
+      .hotel-suggestions {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+        overflow-y: auto;
+        max-height: 220px;
+
+        z-index: 999;
+        display: none;
+        border: 1px solid #e2e8f0;
+        color: #000000;
+      }
+
+      /* --- Featured Section --- */
+      .main-content {
+        max-width: 1400px;
+        margin: 120px auto 60px;
+        padding: 0 60px;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 40px;
+      }
+
+      .section-title h2 {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--text-main);
+        margin-bottom: 8px;
+      }
+
+      .section-title p {
+        color: var(--text-muted);
+        font-size: 16px;
+      }
+
+      .slider-controls {
+        display: flex;
+        gap: 12px;
+      }
+
+      .control-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .control-btn:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .control-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      /* Voucher */
+      .voucher-slider {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding: 10px 0 30px;
+
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        margin-bottom: 30px;
+      }
+
+      .voucher-slider::-webkit-scrollbar {
+        display: none;
+      }
+
+      .voucher-card {
+        min-width: 320px;
+        max-width: 320px;
+
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+
+        box-shadow: var(--card-shadow);
+
+        border-left: 5px solid var(--accent);
+
+        transition: 0.3s;
+      }
+
+      .voucher-card:hover {
+        transform: translateY(-6px);
+      }
+
+      /* Voucher Detail Modal */
+      .voucher-detail-modal .swal2-popup {
+        border-radius: 24px;
+        padding: 0;
+        overflow: hidden;
+        width: 500px;
+      }
+
+      .voucher-detail-header {
+        padding: 40px 30px;
+        color: rgb(0, 0, 0);
+        text-align: center;
+        position: relative;
+      }
+
+      .voucher-detail-header h3 {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 5px;
+        color: var(--primary);
+      }
+
+      .voucher-detail-header p {
+        opacity: 0.9;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .voucher-detail-content {
+        padding: 30px;
+        text-align: left;
+      }
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      .detail-row:last-child {
+        border-bottom: none;
+      }
+
+      .detail-label {
+        color: var(--text-muted);
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .detail-value {
+        color: var(--text-main);
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .voucher-detail-desc {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px dashed #f1f5f9;
+      }
+
+      .voucher-detail-desc h4 {
+        font-size: 15px;
+        margin-bottom: 10px;
+        color: var(--text-main);
+      }
+
+      .voucher-detail-desc p {
+        font-size: 14px;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+
+      .btn-copy-premium {
+        width: 100%;
+        margin-top: 30px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .btn-copy-premium:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(53, 112, 239, 0.3);
+      }
+
+      .premium-toast {
+        border-radius: 16px !important;
+        padding: 12px 20px !important;
+        font-weight: 600 !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+      }
+
+      /* Cards */
+      .hotels-slider {
+        display: flex;
+        gap: 25px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding: 0px 0 30px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .hotels-slider::-webkit-scrollbar {
+        display: none;
+      }
+
+      .hotel-card {
+        min-width: 298px;
+        max-width: 298px;
+        background: white;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        color: inherit;
+        border: 1px solid #f1f5f9;
+      }
+
+      .hotel-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary-light);
+      }
+
+      .card-img {
+        height: 220px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.6s;
+      }
+
+      .hotel-card:hover .card-img img {
+        transform: scale(1.1);
+      }
+
+      .badge-rating {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--primary);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 10px;
+        font-weight: 800;
+        font-size: 14px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .card-body {
+        padding: 20px;
+      }
+
+      .hotel-name {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .hotel-loc {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 15px;
+      }
+
+      .hotel-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid #f1f5f9;
+      }
+
+      .rating-label {
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--primary);
+      }
+
+      .review-count {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      /* --- Banner Section --- */
+      .banner-section {
+        background: #1e293b;
+        padding: 80px 60px;
+        margin-top: 60px;
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .banner-section h2 {
+        font-size: 42px;
+        font-weight: 800;
+        margin-bottom: 25px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .banner-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 18px 40px;
+        border-radius: 15px;
+        font-size: 18px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: 0.3s;
+        position: relative;
+        z-index: 2;
+      }
+
+      .banner-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+      }
+
+      .decor-circle {
+        position: absolute;
+        background: rgba(99, 102, 241, 0.1);
+        border-radius: 50%;
+        z-index: 1;
+      }
+
+      /* --- Footer --- */
+      footer {
+        background: white;
+        padding: 80px 60px 40px;
+        border-top: 1px solid #f1f5f9;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr repeat(4, 1fr);
+        gap: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .footer-info h3 {
+        font-size: 24px;
+        color: var(--primary);
+        margin-bottom: 20px;
+      }
+
+      .footer-info p {
+        color: var(--text-muted);
+        line-height: 1.8;
+        max-width: 300px;
+      }
+
+      .footer-col h4 {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: var(--text-main);
+      }
+
+      .footer-col ul {
+        list-style: none;
+      }
+
+      .footer-col ul li {
+        margin-bottom: 12px;
+      }
+
+      .footer-col ul li a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.2s;
+      }
+
+      .footer-col ul li a:hover {
+        color: var(--primary);
+        padding-left: 5px;
+      }
+
+      .footer-bottom {
+        margin-top: 60px;
+        padding-top: 30px;
+        border-top: 1px solid #f1f5f9;
+        text-align: center;
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+    </style>
+
+    <link rel="stylesheet" href="/css/chatbot.css" />
+  </head>
+  <body>
+    <header id="mainHeader">
+      <div class="header-container">
+        <a href="home.html" class="brand-logo">
+          <i class="fas fa-paper-plane"></i> LoudBooking
+        </a>
+        <div class="nav-actions">
+          <nav class="nav-links">
+            <a href="home.html">Trang chủ</a>
+            <a href="introduce.html">Giới thiệu</a>
+            <a href="voucher.html">Khuyến mãi</a>
+            <a href="bill.html">Đặt phòng của tôi</a>
+          </nav>
+          <div class="user-profile" onclick="toggleDropdown()">
+            <div class="user-avatar-wrapper">
+              <img id="userAvatar" src="" alt="Avatar" />
+              <div id="userInitials" class="avatar-initials">U</div>
+            </div>
+            <span id="buttonusername">Đăng nhập</span>
+            <i class="fas fa-chevron-down" style="font-size: 10px"></i>
+
+            <div id="dropdownMenu" class="dropdown-menu">
+              <button
+                class="dropdown-item"
+                onclick="location.href = 'my-account.html'"
+              >
+                <i class="fas fa-user-circle"></i> Tài khoản của tôi
+              </button>
+              <button
+                class="dropdown-item"
+                onclick="location.href = 'bill.html'"
+              >
+                <i class="fas fa-receipt"></i> Đơn đặt phòng
+              </button>
+              <button
+                class="dropdown-item"
+                onclick="location.href = 'chat.html'"
+              >
+                <i class="fas fa-comment-dots"></i> Tin nhắn
+              </button>
+              <button class="dropdown-item logout" onclick="logoutUser()">
+                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1></h1>
+      <p></p>
+
+      <div class="search-wrapper">
+        <form
+          id="searchForm"
+          class="search-container"
+          onsubmit="handleSearch(event)"
+        >
+          <div class="search-box keyword-box">
+            <label>Điểm đến - khách sạn</label>
+            <input
+              type="text"
+              id="keyword"
+              placeholder="VD: Hà Nội, Đà Nẵng, ..."
+              autocomplete="off"
+              oninput="filterHotels()"
+              onfocus="showAllHotels()"
+            />
+
+            <div id="hotelSuggestions" class="hotel-suggestions"></div>
+          </div>
+          <div class="search-box">
+            <label>Ngày nhận</label>
+
+            <input
+              type="text"
+              id="startDate"
+              placeholder="Chọn ngày"
+              readonly
+              required
+            />
+          </div>
+
+          <div class="search-box">
+            <label>Ngày trả</label>
+
+            <input type="text" id="endDate" placeholder="Chọn ngày" readonly />
+          </div>
+          <div class="search-box">
+            <label>Số phòng</label>
+            <input type="number" id="roomCount" min="1" value="1" />
+          </div>
+          <button type="submit" class="btn-search">
+            <i class="fas fa-search"></i> Tìm ngay
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- VOUCHER SECTION -->
+      <div class="section-header" style="margin-bottom: 20px">
+        <div class="section-title">
+          <h2>Khuyến mãi hấp dẫn</h2>
+          <p>Nhận ngay mã giảm giá để tận hưởng kỳ nghỉ tiết kiệm</p>
+        </div>
+
+        <div class="slider-controls">
+          <button class="control-btn" id="voucherPrevBtn">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          <button class="control-btn" id="voucherNextBtn">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="publicVouchers" class="voucher-slider"></div>
+
+      <div class="section-header">
+        <div class="section-title">
+          <h2>Khám phá các khách sạn nổi bật</h2>
+          <p>Những khách sạn được đánh giá cao</p>
+        </div>
+        <div class="slider-controls">
+          <button class="control-btn" id="prevBtn">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="control-btn" id="nextBtn">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="hotels-slider" id="hotelsContainer">
+        <!-- Dynamic Hotel Cards will be injected here -->
+        <div style="padding: 100px; text-align: center; width: 100%">
+          <i
+            class="fas fa-circle-notch fa-spin fa-2x"
+            style="color: var(--primary)"
+          ></i>
+          <p style="margin-top: 15px">Đang tải danh sách khách sạn...</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Promotional Banner -->
+    <section class="banner-section">
+      <div
+        class="decor-circle"
+        style="width: 300px; height: 300px; top: -150px; left: -150px"
+      ></div>
+      <div
+        class="decor-circle"
+        style="
+          width: 200px;
+          height: 200px;
+          bottom: -100px;
+          right: -100px;
+          background: rgba(245, 158, 11, 0.1);
+        "
+      ></div>
+      <h2>Khám phá chuỗi khách sạn của chúng tôi</h2>
+      <p style="margin-bottom: 35px; opacity: 0.8; font-size: 18px">
+        Trải nghiệm nhiều lựa chọn phòng nghỉ chất lượng với ưu đãi lên đến 30%.
+      </p>
+      <button class="banner-btn" onclick="window.location.href = 'search.html'">
+        Tìm kiếm ngay
+      </button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-info">
+          <h3>LoudBooking</h3>
+          <p>
+            Cung cấp giải pháp đặt phòng nhanh chóng, an toàn và uy tín hàng đầu
+            cho hành trình của bạn.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Hỗ trợ</h4>
+          <ul>
+            <li><a href="#">Trung tâm trợ giúp</a></li>
+            <li><a href="#">An toàn khi du lịch</a></li>
+
+            <li><a href="#">Phản hồi</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Khám phá</h4>
+          <ul>
+            <li><a href="#">Khách sạn nổi bật</a></li>
+            <li><a href="#">Ưu đãi mùa hè</a></li>
+            <li><a href="#">Blog du lịch</a></li>
+            <li><a href="#">Điểm đến mới</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Liên kết</h4>
+          <ul>
+            <li><a href="#">Về chúng tôi</a></li>
+            <li><a href="#">Đối tác</a></li>
+            <li><a href="#">Cơ hội việc làm</a></li>
+            <li><a href="#">Liên hệ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Pháp lý</h4>
+          <ul>
+            <li><a href="#">Điều khoản sử dụng</a></li>
+            <li><a href="#">Chính sách bảo mật</a></li>
+            <li>
+              <a href="cancel-policy.html"
+                >Quy định về xác nhận thông tin đặt phòng</a
+              >
+            </li>
+            <li><a href="#">Cookie settings</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          &copy; 2026 LoudBooking.com - Công ty hàng đầu về du lịch trực tuyến
+          tại Việt Nam. Đã đăng ký bản quyền.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const API_URL = "http://localhost:8080";
+
+      let allHotels = [];
+
+      async function loadHotelOptions() {
+        try {
+          const res = await fetch(`${API_URL}/api/hotels?t=${Date.now()}`);
+          const hotels = await res.json();
+
+          console.log(
+            "RAW FROM API:",
+            hotels.map((h) => ({
+              name: h.hotelName,
+              status: h.hotelStatus,
+            })),
+          );
+
+          allHotels = hotels.filter(
+            (h) => h.hotelStatus?.toUpperCase().trim() === "ACTIVE",
+          );
+
+          console.log("AFTER FILTER:", allHotels);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      function showAllHotels() {
+        const suggestionBox = document.getElementById("hotelSuggestions");
+
+        suggestionBox.innerHTML = allHotels
+          .map(
+            (hotel) => `
+        <div 
+          class="suggestion-item"
+          onclick='selectHotel(${JSON.stringify(hotel.hotelName)})'
+        >
+          <i class="fas fa-hotel"></i>
+          ${hotel.hotelName}
+        </div>
+      `,
+          )
+          .join("");
+
+        suggestionBox.style.display = "block";
+      }
+
+      function filterHotels() {
+        const keyword = document.getElementById("keyword").value.toLowerCase();
+
+        const suggestionBox = document.getElementById("hotelSuggestions");
+
+        if (!keyword.trim()) {
+          suggestionBox.style.display = "none";
+          return;
+        }
+
+        const matchedHotels = allHotels.filter(
+          (hotel) =>
+            hotel.hotelName.toLowerCase().includes(keyword) ||
+            (hotel.address && hotel.address.toLowerCase().includes(keyword)),
+        );
+
+        if (matchedHotels.length === 0) {
+          suggestionBox.style.display = "none";
+          return;
+        }
+
+        suggestionBox.innerHTML = matchedHotels
+          .slice(0, 6)
+          .map(
+            (hotel) => `
+      <div 
+        class="suggestion-item"
+        onclick='selectHotel(${JSON.stringify(hotel.hotelName)})'
+      >
+        <i class="fas fa-hotel"></i>
+        ${hotel.hotelName}
+      </div>
+    `,
+          )
+          .join("");
+
+        suggestionBox.style.display = "block";
+      }
+
+      function selectHotel(name) {
+        document.getElementById("keyword").value = name;
+
+        document.getElementById("hotelSuggestions").style.display = "none";
+      }
+
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".keyword-box")) {
+          document.getElementById("hotelSuggestions").style.display = "none";
+        }
+      });
+
+      function checkLoginState() {
+        const token = localStorage.getItem("accessToken");
+        const username = localStorage.getItem("username");
+        const fullname = localStorage.getItem("fullname");
+        const role = localStorage.getItem("role");
+
+        if (token && username) {
+          // Đã đăng nhập
+          let displayName =
+            fullname && fullname.trim() !== "" ? fullname : username;
+          document.getElementById("buttonusername").innerText = displayName;
+          document.getElementById("userInitials").innerText = displayName
+            .charAt(0)
+            .toUpperCase();
+
+          // Xử lý avatar: có thể gọi API lấy user info nếu cần thiết,
+          // nhưng tạm thời dùng Initials
+
+          // Hiện user profile, ẩn btn login
+          // (Trong HTML hiện tại .user-profile luôn hiện, ta sẽ gán click mở menu)
+        } else {
+          // Chưa đăng nhập
+          document.getElementById("buttonusername").innerText = "Đăng nhập";
+          document.querySelector(".user-profile").onclick = function () {
+            window.location.href = "login.html";
+          };
+          document.getElementById("dropdownMenu").style.display = "none";
+        }
+      }
+
+      let allVouchers = [];
+
+      async function loadPublicVouchers() {
+        try {
+          const res = await fetch(`${API_URL}/api/vouchers/public`);
+          if (res.ok) {
+            allVouchers = await res.json();
+            const container = document.getElementById("publicVouchers");
+            if (allVouchers.length === 0) {
+              container.innerHTML =
+                "<p style='color: var(--text-muted); font-size: 15px;'>Hiện tại chưa có khuyến mãi nào.</p>";
+              return;
+            }
+            container.innerHTML = allVouchers
+              .map(
+                (v) => `
+    <div class="voucher-card">
+      <div style="font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 8px;">
+        ${v.voucherCode}
+      </div>
+
+      <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">
+        ${v.title || ""}
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 16px; font-weight: 800; color: var(--accent);">
+          Giảm ${v.discountValue ? v.discountValue.toLocaleString() : 0}
+          ${v.discountType === "PERCENT" ? "%" : "VNĐ"}
+        </span>
+      </div>
+      <div onclick="showVoucherDetail(${v.voucherId})" style="font-size: 13px; color: var(--primary); font-weight: 600; margin-bottom: 15px; cursor: pointer; text-decoration: underline;">
+        Xem chi tiết
+      </div>
+    </div>
+  `,
+              )
+              .join("");
+          }
+        } catch (e) {
+          console.error("Could not load vouchers");
+        }
+      }
+
+      function showVoucherDetail(id) {
+        const v = allVouchers.find((x) => x.voucherId == id);
+        if (!v) return;
+
+        const discountTxt =
+          v.discountValue.toLocaleString() +
+          (v.discountType === "PERCENT" ? "%" : " VNĐ");
+        const minBillTxt = v.minBillAmount
+          ? v.minBillAmount.toLocaleString() + " VNĐ"
+          : "Không giới hạn";
+        const maxDiscountTxt = v.maxDiscountAmount
+          ? v.maxDiscountAmount.toLocaleString() + " VNĐ"
+          : "Không giới hạn";
+        const startDateTxt = v.startDate
+          ? new Date(v.startDate).toLocaleString("vi-VN")
+          : "Đang cập nhật";
+
+        const endDateTxt = v.endDate
+          ? new Date(v.endDate).toLocaleString("vi-VN")
+          : "Đang cập nhật";
+
+        Swal.fire({
+          html: `
+            <div class="voucher-detail-header">
+              <p>MÃ KHUYẾN MÃI</p>
+              <h3>${v.voucherCode}</h3>
+            </div>
+
+            <div class="voucher-detail-content">
+              <div class="detail-row">
+                <span class="detail-label">Chương trình ưu đãi</span>
+                <span class="detail-value">
+                  ${v.title || "Ưu đãi LoudBooking"}
+                </span>
+              </div>
+
+              <div class="detail-row">
+                <span class="detail-label">Mức ưu đãi</span>
+                <span class="detail-value" style="color: var(--accent); font-size: 16px;">
+                  ${discountTxt}
+                </span>
+              </div>
+
+              <div class="detail-row">
+                <span class="detail-label">Đơn tối thiểu</span>
+                <span class="detail-value">${minBillTxt}</span>
+              </div>
+
+              <div class="detail-row">
+                <span class="detail-label">Giảm tối đa</span>
+                <span class="detail-value">${maxDiscountTxt}</span>
+              </div>
+
+              <div class="detail-row">
+                <span class="detail-label">Hiệu lực từ</span>
+                <span class="detail-value">${startDateTxt}</span>
+              </div>
+
+              <div class="detail-row">
+                <span class="detail-label">Hết hạn</span>
+                <span class="detail-value">${endDateTxt}</span>
+              </div>
+
+              <div class="detail-row">
+                <span class="detail-label">Số lượng còn lại</span>
+                <span class="detail-value">
+                  ${(v.quantity || 0) - (v.usedCount || 0)}
+                </span>
+              </div>
+
+              <div class="voucher-detail-desc">
+                <h4>Thông tin ưu đãi</h4>
+                <p>
+                  ${v.description || "Áp dụng cho khách hàng đặt phòng trực tuyến tại LoudBooking."}
+                </p>
+              </div>
+
+            </div>
+          `,
+          showConfirmButton: false,
+          showCloseButton: true,
+          customClass: {
+            container: "voucher-detail-modal",
+          },
+          width: 500,
+        });
+      }
+
+      function copyVoucherCode(code) {
+        navigator.clipboard.writeText(code).then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Đã sao chép mã!",
+            text: `Mã ${code} đã sẵn sàng để sử dụng.`,
+            timer: 2000,
+            showConfirmButton: false,
+            toast: true,
+            position: "top-end",
+            background: "#ffffff",
+            iconColor: "#10b981",
+            customClass: {
+              popup: "premium-toast",
+            },
+          });
+        });
+      }
+
+      // Sticky Header Logic
+      window.onscroll = () => {
+        const header = document.getElementById("mainHeader");
+        if (window.scrollY > 50) header.classList.add("scrolled");
+        else header.classList.remove("scrolled");
+      };
+
+      // User Dropdown
+      function toggleDropdown() {
+        const token = localStorage.getItem("accessToken");
+        if (!token) return; // Nếu chưa đăng nhập thì đã bị đè sự kiện onclick ở trên
+
+        const menu = document.getElementById("dropdownMenu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      }
+
+      // Close dropdown when clicking outside
+      window.onclick = (e) => {
+        if (!e.target.closest(".user-profile")) {
+          document.getElementById("dropdownMenu").style.display = "none";
+        }
+      };
+
+      // Data Loading
+      async function loadHotels() {
+        const container = document.getElementById("hotelsContainer");
+        try {
+          const res = await fetch(
+            `${API_URL}/api/hotels?t=${new Date().getTime()}`,
+          );
+          const data = await res.json();
+
+          const activeHotels = data.filter(
+            (h) =>
+              h.hotelStatus === "ACTIVE" || h.hotelStatus === "MAINTENANCE",
+          );
+          container.innerHTML = "";
+
+          if (activeHotels.length === 0) {
+            container.innerHTML =
+              "<p style='width:100%; text-align:center;'>Hiện chưa có khách sạn nào khả dụng.</p>";
+            return;
+          }
+
+          for (const h of activeHotels) {
+            // Fetch Rating Info
+            let rating = "0.0";
+            let count = 0;
+            try {
+              const rRes = await fetch(
+                `${API_URL}/api/reviews/hotel/${h.hotelId}`,
+              );
+              const reviews = await rRes.json();
+              count = reviews.length;
+              if (count > 0) {
+                const sum = reviews.reduce((s, r) => s + r.rate, 0);
+                rating = (sum / count).toFixed(1);
+              }
+            } catch (e) {}
+
+            const image = h.mainImage
+              ? `${API_URL}${h.mainImage}`
+              : "https://via.placeholder.com/400x300";
+            const label = getRatingLabel(parseFloat(rating));
+
+            const html = `
+                        <a href="detail-hotel.html?id=${h.hotelId}" class="hotel-card">
+                            <div class="card-img">
+                                <img src="${image}" alt="${h.hotelName}">
+                                <div class="badge-rating">${rating}</div>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="hotel-name">${h.hotelName}</h3>
+                                <div class="hotel-loc">
+                                    <i class="fas fa-location-dot"></i> ${h.address || "Đang cập nhật"}
+                                </div>
+                                <div class="hotel-stats">
+                                    <div class="rating-label">${label}</div>
+                                    <div class="review-count">${count} đánh giá</div>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+            container.insertAdjacentHTML("beforeend", html);
+          }
+        } catch (error) {
+          console.error("Error loading hotels:", error);
+          container.innerHTML =
+            "<p style='width:100%; text-align:center;'>Không thể kết nối đến máy chủ.</p>";
+        }
+      }
+
+      function getRatingLabel(avg) {
+        if (avg >= 9) return "Tuyệt vời";
+        if (avg >= 8) return "Rất tốt";
+        if (avg >= 7) return "Tốt";
+        return "Bình thường";
+      }
+
+      // Search Logic
+      function handleSearch(e) {
+        e.preventDefault();
+
+        const keyword = document.getElementById("keyword").value;
+        const start = document.getElementById("startDate").value;
+        const end = document.getElementById("endDate").value;
+        const roomCount = document.getElementById("roomCount").value;
+
+        if (!keyword.trim()) {
+          alert("Vui lòng nhập địa điểm hoặc khách sạn!");
+          return;
+        }
+
+        if (!start || !end) {
+          alert("Vui lòng chọn ngày!");
+          return;
+        }
+
+        window.location.href =
+          `search.html?keyword=${encodeURIComponent(keyword)}` +
+          `&checkIn=${start}` +
+          `&checkOut=${end}` +
+          `&roomCount=${roomCount}`;
+      }
+
+      // Logout
+      function logoutUser() {
+        localStorage.clear();
+        window.location.href = "/login.html";
+      }
+
+      // Slider Logic
+      const slider = document.getElementById("hotelsContainer");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+
+      nextBtn.onclick = () =>
+        slider.scrollBy({ left: 350, behavior: "smooth" });
+      prevBtn.onclick = () =>
+        slider.scrollBy({ left: -350, behavior: "smooth" });
+      // ===== Voucher Slider =====
+      const voucherSlider = document.getElementById("publicVouchers");
+
+      const voucherPrevBtn = document.getElementById("voucherPrevBtn");
+
+      const voucherNextBtn = document.getElementById("voucherNextBtn");
+
+      voucherNextBtn.onclick = () =>
+        voucherSlider.scrollBy({
+          left: 350,
+          behavior: "smooth",
+        });
+
+      voucherPrevBtn.onclick = () =>
+        voucherSlider.scrollBy({
+          left: -350,
+          behavior: "smooth",
+        });
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        const username = localStorage.getItem("username");
+        const avatar = localStorage.getItem("avatar");
+        const userAvatar = document.getElementById("userAvatar");
+        const userInitials = document.getElementById("userInitials");
+
+        if (username) {
+          document.getElementById("buttonusername").innerText = username;
+          // Set initials
+          const initials = username
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase()
+            .substring(0, 2);
+          userInitials.innerText = initials;
+        }
+
+        if (avatar && avatar !== "null" && avatar !== "undefined") {
+          userAvatar.src = avatar.startsWith("http")
+            ? avatar
+            : `${API_URL}${avatar}`;
+          userAvatar.style.display = "block";
+          userInitials.style.display = "none";
+
+          userAvatar.onerror = () => {
+            userAvatar.style.display = "none";
+            userInitials.style.display = "flex";
+          };
+        } else {
+          userAvatar.style.display = "none";
+          userInitials.style.display = "flex";
+        }
+
+        loadHotels();
+        loadHotelOptions();
+        loadPublicVouchers();
+      });
+    </script>
+    <script>
+      const startPicker = flatpickr("#startDate", {
+        locale: "vn",
+
+        dateFormat: "Y-m-d",
+
+        minDate: "today",
+
+        disableMobile: true,
+
+        showMonths: 1,
+
+        monthSelectorType: "static",
+
+        static: true,
+
+        allowInput: false,
+
+        onChange: function (selectedDates) {
+          if (selectedDates.length > 0) {
+            const nextDay = new Date(selectedDates[0]);
+            nextDay.setDate(nextDay.getDate() + 1);
+
+            endPicker.set("minDate", nextDay);
+          }
+        },
+
+        onReady: function (selectedDates, dateStr, instance) {
+          addFlatpickrButtons(instance);
+        },
+      });
+
+      const endPicker = flatpickr("#endDate", {
+        locale: "vn",
+
+        dateFormat: "Y-m-d",
+
+        minDate: "today",
+
+        disableMobile: true,
+
+        showMonths: 1,
+
+        monthSelectorType: "static",
+
+        static: true,
+
+        allowInput: false,
+
+        onReady: function (selectedDates, dateStr, instance) {
+          addFlatpickrButtons(instance);
+        },
+      });
+
+      // ===== Footer =====
+      function addFlatpickrButtons(instance) {
+        const calendar = instance.calendarContainer;
+
+        if (calendar.querySelector(".custom-flatpickr-footer")) return;
+
+        const footer = document.createElement("div");
+
+        footer.className = "custom-flatpickr-footer";
+
+        footer.innerHTML = `
+      <button type="button" class="fp-btn-clear">
+        Xóa ngày
+      </button>
+
+      <button type="button" class="fp-btn-today">
+        Hôm nay
+      </button>
+    `;
+
+        calendar.appendChild(footer);
+
+        footer.querySelector(".fp-btn-clear").addEventListener("click", () => {
+          instance.clear();
+        });
+
+        footer.querySelector(".fp-btn-today").addEventListener("click", () => {
+          instance.setDate(new Date(), true);
+        });
+      }
+    </script>
+
+    <script src="/js/chatbot.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,1177 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quy định về xác nhận thông tin đặt phòng | LoudBooking</title>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --primary: #3570ef;
+        --primary-hover: #4d78ef;
+        --primary-light: #eef2ff;
+        --secondary: #10b981;
+        --accent: #f59e0b;
+        --bg-body: #f8fafc;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --glass-bg: rgba(255, 255, 255, 0.85);
+        --card-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.05),
+          0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        --radius-lg: 24px;
+        --radius-md: 16px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background: var(--bg-body);
+        color: var(--text-main);
+      }
+
+      .brand-logo {
+        font-family: "Outfit", sans-serif;
+      }
+
+      /* HEADER */
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        padding: 16px 60px;
+      }
+
+      .header-container {
+        max-width: 1400px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .brand-logo {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--primary);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        color: var(--text-main);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 10px 16px;
+        border-radius: 30px;
+        transition: 0.3s;
+      }
+
+      .nav-links a:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 18px;
+        border-radius: 40px;
+        background: var(--primary-light);
+        color: var(--primary);
+        cursor: pointer;
+        transition: 0.3s;
+        position: relative;
+        border: 1px solid #dbeafe;
+      }
+
+      .user-profile:hover {
+        background: #dbeafe;
+      }
+
+      .user-avatar-wrapper {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        flex-shrink: 0;
+        font-weight: 800;
+      }
+
+      .user-avatar-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+      }
+
+      .avatar-initials {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+      }
+
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 12px);
+        right: 0;
+        width: 240px;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid #f1f5f9;
+        z-index: 999;
+      }
+
+      .dropdown-item {
+        width: 100%;
+        border: none;
+        background: none;
+        padding: 14px 18px;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-main);
+        transition: 0.3s;
+      }
+
+      .dropdown-item:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .dropdown-item.logout {
+        color: #ef4444;
+        border-top: 1px solid #f1f5f9;
+      }
+
+      /* SEARCH BAR */
+
+      .top-search-section {
+        padding: 30px 60px;
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .search-container {
+        max-width: 1400px;
+        margin: auto;
+        background: white;
+        padding: 15px;
+        border-radius: var(--radius-md);
+        box-shadow: var(--card-shadow);
+
+        display: grid;
+        grid-template-columns: 2fr 1.2fr 1.2fr 1fr 0.9fr;
+        gap: 12px;
+      }
+
+      .search-box {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 12px 18px;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 1px solid transparent;
+      }
+
+      .search-box:hover {
+        border-color: var(--primary);
+        background: white;
+      }
+
+      .search-box label {
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        letter-spacing: 1px;
+      }
+
+      .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-main);
+      }
+
+      .search-box select {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 15px;
+        color: var(--text-main);
+        margin-top: 8px;
+        cursor: pointer;
+      }
+
+      .btn-search {
+        border: none;
+        border-radius: 12px;
+        background: var(--primary);
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn-search:hover {
+        background: var(--primary-hover);
+      }
+
+      .keyword-box {
+        position: relative;
+      }
+
+      .suggestion-item {
+        padding: 14px 18px;
+        cursor: pointer;
+        transition: 0.2s;
+
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .suggestion-item:hover {
+        background: #f8fafc;
+        color: var(--primary);
+      }
+
+      .suggestion-item i {
+        color: var(--primary);
+      }
+      .hotel-suggestions {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+        overflow-y: auto;
+        max-height: 220px;
+
+        z-index: 999;
+        display: none;
+        border: 1px solid #e2e8f0;
+      }
+
+      /* MAIN */
+      .main-container {
+        max-width: 1400px;
+        margin: 40px auto;
+        padding: 0 60px;
+
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 30px;
+      }
+
+      /* FILTER */
+
+      .filter-section {
+        background: white;
+        border-radius: var(--radius-md);
+        padding: 25px;
+        box-shadow: var(--card-shadow);
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+      }
+
+      .filter-title {
+        font-size: 22px;
+        font-weight: 800;
+        margin-bottom: 25px;
+      }
+
+      .filter-group {
+        margin-bottom: 30px;
+      }
+
+      .filter-group h4 {
+        font-size: 15px;
+        margin-bottom: 15px;
+      }
+
+      .filter-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+
+      .filter-item input {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* PRICE RANGE */
+
+      .price-slider-wrapper {
+        margin-top: 10px;
+      }
+
+      .price-values {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+      }
+
+      #priceRange {
+        width: 100%;
+        appearance: none;
+        height: 6px;
+        border-radius: 999px;
+        background: #dbeafe;
+        outline: none;
+      }
+
+      #priceRange::-webkit-slider-thumb {
+        appearance: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--primary);
+        cursor: pointer;
+        border: 4px solid white;
+        box-shadow: 0 4px 10px rgba(53, 112, 239, 0.35);
+        transition: 0.2s;
+      }
+
+      #priceRange::-webkit-slider-thumb:hover {
+        transform: scale(1.08);
+      }
+
+      .price-current {
+        margin-top: 14px;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .price-current strong {
+        color: var(--primary);
+        font-size: 15px;
+      }
+
+      /* RESULT */
+
+      .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+
+      .results-title h2 {
+        font-size: 30px;
+        font-weight: 800;
+      }
+
+      .results-title p {
+        color: var(--text-muted);
+        margin-top: 6px;
+      }
+
+      .sort-box {
+        background: white;
+        padding: 12px 18px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .sort-box select {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-weight: 600;
+      }
+
+      /* HOTEL CARD */
+
+      .hotel-list {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+      }
+
+      .hotel-card {
+        background: white;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        transition: 0.3s;
+        border: 1px solid #f1f5f9;
+      }
+
+      .hotel-card:hover {
+        transform: translateY(-4px);
+      }
+
+      .hotel-image {
+        position: relative;
+        height: 100%;
+      }
+
+      .hotel-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .rating-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--primary);
+        color: white;
+        padding: 8px 14px;
+        border-radius: 10px;
+        font-weight: 800;
+      }
+
+      .hotel-content {
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .hotel-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .hotel-name {
+        font-size: 26px;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+
+      .hotel-location {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+
+      .hotel-description {
+        color: var(--text-muted);
+        line-height: 1.7;
+        font-size: 14px;
+      }
+
+      .hotel-price {
+        text-align: right;
+      }
+
+      .hotel-price span {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .hotel-price h3 {
+        font-size: 32px;
+        color: var(--primary);
+        margin: 10px 0;
+      }
+
+      .btn-view {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 14px 22px;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn-view:hover {
+        background: var(--primary-hover);
+      }
+
+      .hotel-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid #f1f5f9;
+      }
+
+      .hotel-tags {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        background: var(--primary-light);
+        color: var(--primary);
+        padding: 8px 12px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .review {
+        color: var(--secondary);
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      /* RESPONSIVE */
+
+      @media (max-width: 1200px) {
+        .main-container {
+          grid-template-columns: 1fr;
+        }
+
+        .filter-section {
+          position: static;
+        }
+      }
+
+      @media (max-width: 992px) {
+        header,
+        .top-search-section,
+        .main-container {
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+
+        .search-container {
+          grid-template-columns: 1fr;
+        }
+
+        .hotel-card {
+          grid-template-columns: 1fr;
+        }
+
+        .hotel-image {
+          height: 260px;
+        }
+
+        .hotel-top {
+          flex-direction: column;
+        }
+
+        .hotel-price {
+          text-align: left;
+        }
+      }
+    </style>
+  
+    <link rel="stylesheet" href="/css/chatbot.css">
+</head>
+
+  <body>
+    <!-- HEADER -->
+    <header>
+      <div class="header-container">
+        <a href="home.html" class="brand-logo">
+          <i class="fas fa-paper-plane"></i>
+          LoudBooking
+        </a>
+
+        <div class="nav-actions">
+          <nav class="nav-links">
+            <a href="home.html"></a>
+          </nav>
+
+          <div class="user-profile" onclick="toggleDropdown()">
+            <div class="user-avatar-wrapper">
+              <img id="userAvatar" src="" alt="Avatar" />
+              <div id="userInitials" class="avatar-initials">U</div>
+            </div>
+
+            <span id="buttonusername">Đăng nhập</span>
+
+            <i class="fas fa-chevron-down" style="font-size: 10px"></i>
+
+            <div id="dropdownMenu" class="dropdown-menu">
+              <button
+                class="dropdown-item"
+                onclick="location.href = 'my-account.html'"
+              >
+                <i class="fas fa-user-circle"></i>
+                Hồ sơ của tôi
+              </button>
+
+              <button
+                class="dropdown-item"
+                onclick="location.href = 'bill.html'"
+              >
+                <i class="fas fa-receipt"></i>
+                Đơn đặt phòng
+              </button>
+
+              <button
+                class="dropdown-item"
+                onclick="location.href = 'chat.html'"
+              >
+                <i class="fas fa-comment-dots"></i>
+                Tin nhắn
+              </button>
+
+              <button class="dropdown-item logout" onclick="logoutUser()">
+                <i class="fas fa-sign-out-alt"></i>
+                Đăng xuất
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+
+    <main class="main-container">
+      <div
+        style="
+          grid-column: 1 / -1;
+          background: white;
+          border-radius: var(--radius-lg);
+          padding: 50px;
+          box-shadow: var(--card-shadow);
+          border: 1px solid #e2e8f0;
+        "
+      >
+        <div style="margin-bottom: 40px">
+          <h1 style="font-size: 40px; font-weight: 800; margin-bottom: 12px">
+            Quy định đặt phòng
+          </h1>
+
+          <p
+            style="color: var(--text-muted); font-size: 16px; line-height: 1.8"
+          >
+            Các điều khoản và chính sách áp dụng khi khách hàng sử dụng dịch vụ
+            đặt phòng trên LoudBooking.
+          </p>
+        </div>
+
+        <!-- I -->
+        <section style="margin-bottom: 50px">
+          <h2
+            style="
+              font-size: 28px;
+              font-weight: 800;
+              margin-bottom: 25px;
+              color: var(--primary);
+            "
+          >
+            I. QUY ĐỊNH ĐẶT PHÒNG
+          </h2>
+
+          <div style="display: flex; flex-direction: column; gap: 28px">
+            <div>
+              <h3 style="font-size: 20px; margin-bottom: 10px">
+                1. Đặt phòng và xác nhận dịch vụ
+              </h3>
+
+              <p style="color: var(--text-muted); line-height: 1.9">
+                Tất cả yêu cầu đặt phòng được thực hiện thông qua hệ thống
+                LoudBooking hoặc các kênh hỗ trợ chính thức của khách sạn. Sau
+                khi đặt phòng thành công, hệ thống sẽ gửi thông tin xác nhận qua
+                email hoặc số điện thoại đã đăng ký.
+              </p>
+            </div>
+
+            <div>
+              <h3 style="font-size: 20px; margin-bottom: 10px">
+                2. Quy định lưu trú
+              </h3>
+
+              <ul
+                style="
+                  padding-left: 22px;
+                  color: var(--text-muted);
+                  line-height: 2;
+                "
+              >
+                <li>
+                  Số lượng khách tối đa phụ thuộc vào từng loại phòng và quy
+                  định của khách sạn.
+                </li>
+                <li>
+                  Khách hàng cần cung cấp đầy đủ và chính xác thông tin người
+                  đặt phòng khi thực hiện đặt phòng.
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 style="font-size: 20px; margin-bottom: 10px">
+                3. Trường hợp đặc biệt
+              </h3>
+
+              <p style="color: var(--text-muted); line-height: 1.9">
+                Trong các trường hợp bất khả kháng như thiên tai, bảo trì hoặc
+                sự cố kỹ thuật, khách sạn có quyền thay đổi phòng hoặc chuyển
+                khách sang khách sạn khác có tiêu chuẩn tương đương nhằm đảm bảo
+                chất lượng lưu trú.
+              </p>
+            </div>
+
+            <div>
+              <h3 style="font-size: 20px; margin-bottom: 10px">
+                4. Yêu cầu đặc biệt
+              </h3>
+
+              <p style="color: var(--text-muted); line-height: 1.9">
+                Các yêu cầu như phòng tầng cao, phòng gần nhau, trang trí phòng,
+                giường đôi hoặc dịch vụ đưa đón sân bay sẽ được hỗ trợ tùy theo
+                tình trạng thực tế của khách sạn tại thời điểm nhận phòng.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- II -->
+        <section style="margin-bottom: 50px">
+          <h2
+            style="
+              font-size: 28px;
+              font-weight: 800;
+              margin-bottom: 25px;
+              color: var(--primary);
+            "
+          >
+            II. QUY ĐỊNH NHẬN/TRẢ PHÒNG
+          </h2>
+
+          <div style="margin-bottom: 30px">
+            <h3 style="font-size: 20px; margin-bottom: 10px">
+              1. Giờ nhận và trả phòng
+            </h3>
+
+            <ul
+              style="
+                padding-left: 22px;
+                color: var(--text-muted);
+                line-height: 2;
+              "
+            >
+              <li>Nhận phòng (Check-in): từ 14:00 ngày nhận phòng</li>
+              <li>Trả phòng (Check-out): trước 12:00 ngày trả phòng</li>
+            </ul>
+          </div>
+
+          <div
+            style="
+              overflow-x: auto;
+              border-radius: 18px;
+              border: 1px solid #e2e8f0;
+            "
+          >
+            <table
+              style="width: 100%; border-collapse: collapse; min-width: 700px"
+            >
+              <thead style="background: var(--primary-light)">
+                <tr>
+                  <th style="padding: 18px; text-align: left; font-size: 14px">
+                    Chính sách
+                  </th>
+
+                  <th style="padding: 18px; text-align: left; font-size: 14px">
+                    Thời gian
+                  </th>
+
+                  <th style="padding: 18px; text-align: left; font-size: 14px">
+                    Phụ thu
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    Nhận phòng sớm
+                  </td>
+
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    Trước 06:00
+                  </td>
+
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    100% giá 1 đêm
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    Nhận phòng sớm
+                  </td>
+
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    06:00 - trước 09:00
+                  </td>
+
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    50% giá 1 đêm
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    Trả phòng muộn
+                  </td>
+
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    12:00 - trước 15:00
+                  </td>
+
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    30% giá 1 đêm
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    Trả phòng muộn
+                  </td>
+
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    15:00 - trước 18:00
+                  </td>
+
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    50% giá 1 đêm
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    Trả phòng muộn
+                  </td>
+
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    Sau 18:00
+                  </td>
+
+                  <td style="padding: 18px; border-top: 1px solid #f1f5f9">
+                    100% giá 1 đêm
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- III -->
+        <section>
+          <h2
+            style="
+              font-size: 28px;
+              font-weight: 800;
+              margin-bottom: 25px;
+              color: var(--primary);
+            "
+          >
+            III. QUY ĐỊNH HOÀN/HỦY PHÒNG
+          </h2>
+
+          <div style="display: flex; flex-direction: column; gap: 28px">
+            <div>
+              <h3 style="font-size: 20px; margin-bottom: 10px">
+                1. Chính sách hủy đặt phòng
+              </h3>
+
+              <p style="color: var(--text-muted); line-height: 1.9">
+                Khách hàng có thể yêu cầu hủy đặt phòng thông qua hệ thống
+                LoudBooking hoặc liên hệ trực tiếp với khách sạn để được hỗ trợ.
+                Chính sách hoàn/hủy sẽ phụ thuộc vào loại phòng, thời điểm hủy
+                và chương trình khuyến mãi áp dụng tại thời điểm đặt phòng.
+              </p>
+            </div>
+
+            <div>
+              <h3 style="font-size: 20px; margin-bottom: 10px">
+                2. Điều kiện hoàn tiền
+              </h3>
+
+              <ul
+                style="
+                  padding-left: 22px;
+                  color: var(--text-muted);
+                  line-height: 2;
+                "
+              >
+                <li>
+                  Hủy đặt phòng trước thời gian nhận phòng từ 3 ngày trở lên có
+                  thể được hỗ trợ hoàn tiền toàn bộ tùy chính sách khách sạn.
+                </li>
+
+                <li>
+                  Hủy phòng trong vòng 24 giờ trước thời gian nhận phòng có thể
+                  bị tính phí hủy hoặc không được hoàn tiền.
+                </li>
+
+                <li>
+                  Các đơn đặt phòng thuộc chương trình khuyến mãi, giá ưu đãi
+                  hoặc voucher đặc biệt có thể không áp dụng hoàn/hủy.
+                </li>
+
+                <li>
+                  Trong trường hợp khách không đến nhận phòng mà không thông báo
+                  trước, đơn đặt phòng sẽ được xem là không đến và không được
+                  hoàn tiền.
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 style="font-size: 20px; margin-bottom: 10px">
+                3. Thời gian xử lý hoàn tiền
+              </h3>
+
+              <p style="color: var(--text-muted); line-height: 1.9">
+                Nếu đủ điều kiện hoàn tiền, hệ thống sẽ tiến hành xử lý trong
+                vòng 7 - 15 ngày làm việc tùy theo phương thức thanh toán và
+                ngân hàng của khách hàng.
+              </p>
+            </div>
+
+            <div>
+              <h3 style="font-size: 20px; margin-bottom: 10px">
+                4. Thay đổi thông tin đặt phòng
+              </h3>
+
+              <p style="color: var(--text-muted); line-height: 1.9">
+                Khách hàng có thể yêu cầu thay đổi ngày nhận phòng, ngày trả
+                phòng, loại phòng hoặc thông tin người nhận phòng tùy theo tình
+                trạng phòng thực tế của khách sạn. Giá phòng có thể thay đổi
+                tương ứng tại thời điểm cập nhật đơn đặt phòng.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const API_URL = "http://localhost:8080";
+
+      async function loadHotels() {
+        const list = document.getElementById("hotelList");
+
+        const params = getParams();
+
+        await loadHotelOptions();
+
+        document.getElementById("keyword").value = params.keyword;
+        document.getElementById("checkIn").value = params.checkIn;
+        document.getElementById("checkOut").value = params.checkOut;
+        document.getElementById("roomCount").value = params.roomCount;
+
+        document.getElementById("searchInfo").innerHTML = `
+      Tìm thấy khách sạn phù hợp cho ${params.roomCount} phòng
+    `;
+
+        try {
+          const res = await fetch(
+            `${API_URL}/api/hotels/search-available` +
+              `?keyword=${encodeURIComponent(params.keyword)}` +
+              `&checkIn=${params.checkIn}` +
+              `&checkOut=${params.checkOut}` +
+              `&roomCount=${params.roomCount}`,
+          );
+
+          const hotels = await res.json();
+
+          searchedHotels = hotels;
+
+          if (!hotels || hotels.length === 0) {
+            list.innerHTML = `
+          <div style="
+            background:white;
+            padding:60px;
+            border-radius:20px;
+            text-align:center;
+            box-shadow: var(--card-shadow);
+          ">
+            <i class="fas fa-hotel fa-3x" style="color:#cbd5e1;"></i>
+
+            <h3 style="margin-top:20px;">
+              Không có phòng trống phù hợp
+            </h3>
+
+            <p style="margin-top:10px;color:var(--text-muted);">
+              Vui lòng chọn khoảng thời gian khác.
+            </p>
+          </div>
+        `;
+
+            return;
+          }
+
+          renderHotels(hotels);
+        } catch (error) {
+          console.error(error);
+
+          list.innerHTML = `
+        <div style="
+          background:white;
+          padding:60px;
+          border-radius:20px;
+          text-align:center;
+        ">
+          <h3>Không thể kết nối máy chủ</h3>
+          <p style="color:var(--text-muted);margin-top:10px;">${error.message}</p>
+        </div>
+      `;
+        }
+      }
+    </script>
+    <script>
+      function toggleDropdown() {
+        const menu = document.getElementById("dropdownMenu");
+
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      }
+
+      window.onclick = (e) => {
+        if (!e.target.closest(".user-profile")) {
+          const menu = document.getElementById("dropdownMenu");
+
+          if (menu) {
+            menu.style.display = "none";
+          }
+        }
+      };
+
+      function logoutUser() {
+        localStorage.clear();
+        window.location.href = "login.html";
+      }
+
+      function loadUserInfo() {
+        const username = localStorage.getItem("username");
+        const avatar = localStorage.getItem("avatar");
+
+        const userAvatar = document.getElementById("userAvatar");
+        const userInitials = document.getElementById("userInitials");
+
+        if (username) {
+          document.getElementById("buttonusername").innerText = username;
+
+          const initials = username
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .substring(0, 2)
+            .toUpperCase();
+
+          userInitials.innerText = initials;
+        }
+
+        if (avatar && avatar !== "null" && avatar !== "undefined") {
+          userAvatar.src = avatar.startsWith("http")
+            ? avatar
+            : `${API_URL}${avatar}`;
+
+          userAvatar.style.display = "block";
+          userInitials.style.display = "none";
+
+          userAvatar.onerror = () => {
+            userAvatar.style.display = "none";
+            userInitials.style.display = "flex";
+          };
+        } else {
+          userAvatar.style.display = "none";
+          userInitials.style.display = "flex";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadHotels();
+        loadUserInfo();
+        const priceRange = document.getElementById("priceRange");
+        const priceCurrentValue = document.getElementById("priceCurrentValue");
+
+        priceRange.addEventListener("input", () => {
+          const value = Number(priceRange.value);
+
+          priceCurrentValue.innerText = value.toLocaleString("vi-VN") + "đ";
+
+          filterHotelsBySidebar();
+        });
+        document
+          .getElementById("sortSelect")
+          .addEventListener("change", sortHotels);
+        document
+          .querySelectorAll(".rating-filter, .brand-filter")
+          .forEach((checkbox) => {
+            checkbox.addEventListener("change", filterHotelsBySidebar);
+          });
+      });
+    </script>
+  
+    <script src="/js/chatbot.js" defer></script>
+</body>
+</html>

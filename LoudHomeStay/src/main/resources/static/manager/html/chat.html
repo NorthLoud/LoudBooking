@@ -1,0 +1,1321 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hỗ trợ khách hàng | Manager</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+      :root {
+        --primary: #4f46e5;
+        --primary-light: #eef2ff;
+        --secondary: #64748b;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --info: #0ea5e9;
+        --bg-body: #f1f5f9;
+        --sidebar-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --radius-lg: 16px;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+        --shadow-md:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      .logo-text {
+        font-family: "Outfit", sans-serif;
+      }
+      body {
+        background-color: var(--bg-body);
+        color: var(--text-main);
+        display: flex;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* --- Sidebar --- */
+      .sidebar {
+        width: 260px;
+        background: var(--sidebar-bg);
+        border-right: 1px solid #e2e8f0;
+        position: fixed;
+        height: 100vh;
+        z-index: 1000;
+        transition: 0.3s;
+        padding: 30px 15px;
+      }
+      .logo-box {
+        padding: 0 15px 30px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--primary);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+      }
+      .logo-text {
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--text-main);
+      }
+
+      .nav-group-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        letter-spacing: 1px;
+      }
+      .side-nav {
+        list-style: none;
+        margin-top: 10px;
+      }
+      .side-nav li {
+        margin-bottom: 4px;
+      }
+      .side-nav a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 15px;
+        border-radius: 10px;
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        transition: 0.2s;
+      }
+      .side-nav a:hover,
+      .side-nav a.active {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+      .side-nav a i:first-child {
+        width: 24px;
+        font-size: 18px;
+      }
+      .submenu {
+        list-style: none;
+        padding-left: 35px;
+        margin-top: 4px;
+        display: none;
+      }
+      .submenu.show {
+        display: block;
+      }
+      .submenu a {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+
+      /* Main Content */
+      .main-wrapper {
+        flex: 1;
+        margin-left: 260px;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      .top-bar {
+        height: 70px;
+        background: white;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+      }
+
+      .chat-container {
+        flex: 1;
+        display: flex;
+        background: #fff;
+        margin: 20px;
+        border-radius: var(--radius-lg);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+      }
+
+      .chat-list {
+        width: 360px;
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+      }
+
+      .chat-list-header {
+        padding: 20px;
+        font-weight: 800;
+        font-size: 24px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .chat-partners {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px;
+      }
+
+      .chat-item {
+        padding: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        transition: 0.2s;
+        border-radius: 12px;
+        margin-bottom: 4px;
+      }
+
+      .chat-item:hover {
+        background: #f2f2f2;
+      }
+
+      .chat-item.active {
+        background: #ebf5ff;
+      }
+
+      .chat-item img {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .chat-item-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .chat-item-name {
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 2px;
+      }
+
+      .chat-item-last {
+        font-size: 13px;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .unread-dot {
+        width: 12px;
+        height: 12px;
+        background: var(--primary);
+        border-radius: 50%;
+      }
+
+      .chat-item.unread .chat-item-name {
+        font-weight: 700;
+      }
+
+      .chat-item.unread .chat-item-last {
+        font-weight: 700;
+        color: #050505;
+      }
+
+      .chat-window {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+      }
+
+      .chat-header {
+        padding: 10px 20px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+
+      .chat-header img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-height: 0;
+      }
+
+      .message-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 5px;
+      }
+
+      .message-row.me {
+        justify-content: flex-end;
+      }
+
+      .message-row.other {
+        justify-content: flex-start;
+      }
+
+      .msg-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        align-self: flex-end;
+        flex-shrink: 0;
+      }
+
+      .message-wrapper {
+        display: flex;
+        flex-direction: column;
+        max-width: 70%;
+        position: relative;
+      }
+
+      .me .message-wrapper {
+        align-items: flex-end;
+      }
+
+      .other .message-wrapper {
+        align-items: flex-start;
+      }
+
+      /* Reply Style Refinement */
+      .msg-reply-line {
+        font-size: 11px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 2px;
+        opacity: 0.8;
+      }
+
+      .msg-reply-line i {
+        transform: scaleX(-1);
+        font-size: 10px;
+      }
+
+      .msg-quoted-content {
+        font-size: 13px;
+        color: var(--text-muted);
+        background: #f0f2f5;
+        padding: 8px 12px;
+        border-radius: 14px 14px 14px 14px;
+        margin-bottom: -12px;
+        padding-bottom: 20px;
+        opacity: 0.8;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        border-left: 3px solid var(--primary);
+        position: relative;
+        z-index: 1;
+      }
+
+      .me .msg-quoted-content {
+        background: #f0f2f5;
+        color: var(--text-muted);
+        border-left-color: var(--primary);
+      }
+
+      .other .msg-quoted-content {
+        border-left-color: var(--primary);
+      }
+
+      .msg-bubble {
+        padding: 8px 12px;
+        border-radius: 18px;
+        font-size: 15px;
+        line-height: 1.4;
+        word-break: break-word;
+        position: relative;
+        z-index: 2;
+      }
+
+      .msg-text {
+        margin-top: 4px;
+        word-break: break-word;
+        line-height: 1.4;
+      }
+
+      .me .msg-bubble {
+        background: var(--primary);
+        color: #fff;
+      }
+
+      .other .msg-bubble {
+        background: #e4e6eb;
+        color: var(--text-main);
+      }
+
+      .msg-images {
+        margin-top: 4px;
+        width: 180px;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        border: 1px solid var(--border-color);
+      }
+
+      .msg-images img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+      }
+
+      .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .msg-actions {
+        display: none;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        gap: 5px;
+        height: 100%;
+        align-items: center;
+        z-index: 10;
+      }
+
+      .me .msg-actions {
+        right: 100%;
+        padding-right: 15px;
+      }
+
+      .other .msg-actions {
+        left: 100%;
+        padding-left: 15px;
+      }
+
+      .message-wrapper:hover .msg-actions {
+        display: flex;
+      }
+
+      .action-item {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #fff;
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: var(--secondary);
+        cursor: pointer;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .action-item:hover {
+        background: #f2f2f2;
+        color: var(--primary);
+      }
+
+      .msg-status {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      .chat-input-container {
+        padding: 10px 15px;
+        border-top: 1px solid var(--border-color);
+        position: relative;
+      }
+
+      #replyBar {
+        display: none;
+        padding: 8px 15px;
+        background: #fff;
+        border-top: 1px solid var(--border-color);
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+      }
+
+      .reply-content {
+        flex: 1;
+        min-width: 0;
+        border-left: 2px solid var(--primary);
+        padding-left: 10px;
+      }
+
+      .reply-content b {
+        display: block;
+        font-size: 12px;
+      }
+
+      .reply-content span {
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+      }
+
+      .close-reply {
+        cursor: pointer;
+        color: var(--secondary);
+        font-size: 20px;
+        padding: 0 5px;
+      }
+
+      .chat-input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f0f2f5;
+        padding: 8px 12px;
+        border-radius: 20px;
+      }
+
+      .chat-input-wrapper input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 15px;
+      }
+
+      .icon-btn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+        font-size: 20px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        border-radius: 50%;
+      }
+
+      .icon-btn:hover {
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      #fileInput {
+        position: absolute;
+        font-size: 100px;
+        opacity: 0;
+        right: 0;
+        top: 0;
+        cursor: pointer;
+      }
+
+      .preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .preview-item {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+      }
+
+      .preview-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .preview-item .remove-btn {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 18px;
+        height: 18px;
+        background: #fff;
+        color: var(--danger);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        cursor: pointer;
+      }
+
+      /* Highlight animation */
+      @keyframes highlight {
+        0% {
+          background-color: #fff9c4;
+        }
+
+        100% {
+          background-color: transparent;
+        }
+      }
+
+      .highlight-msg .msg-bubble {
+        animation: highlight 2s ease-out;
+      }
+
+      /* Gallery Overlay */
+      .gallery-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .gallery-content {
+        position: relative;
+        width: 95%;
+        height: 95%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .gallery-main {
+        position: relative;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 0;
+      }
+
+      .gallery-main-img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+      }
+
+      .gallery-thumbs {
+        display: flex;
+        gap: 10px;
+        padding: 20px;
+        overflow-x: auto;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .gallery-thumbs img {
+        width: 80px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 6px;
+        cursor: pointer;
+        opacity: 0.5;
+        transition: 0.3s;
+      }
+
+      .gallery-thumbs img.active {
+        opacity: 1;
+        border: 2px solid var(--primary);
+      }
+
+      .gallery-overlay .close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: white;
+        font-size: 50px;
+        cursor: pointer;
+        z-index: 10001;
+      }
+
+      .g-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        z-index: 10000;
+      }
+
+      .g-nav.prev {
+        left: 20px;
+      }
+
+      .g-nav.next {
+        right: 20px;
+      }
+      .msg-time-separator {
+        text-align: center;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin: 20px 0 10px;
+        font-weight: 600;
+      }
+    </style>
+
+    <!-- <link rel="stylesheet" href="/css/chatbot.css" /> -->
+  </head>
+
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo-box">
+        <div class="logo-icon"><i class="fas fa-paper-plane"></i></div>
+        <div class="logo-text">LoudBooking</div>
+      </div>
+
+      <nav>
+        <div class="nav-group-label">Trung tâm điều hành</div>
+        <ul class="side-nav">
+          <li>
+            <a href="dashboard.html"
+              ><i class="fas fa-chart-pie"></i> Dashboard<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+          <li>
+            <a href="hotel.html"
+              ><i class="fas fa-hotel"></i> Thông tin khách sạn<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+          <li>
+            <a
+              href="javascript:void(0)"
+              onclick="$('#roomSub').toggleClass('show')"
+            >
+              <i class="fas fa-bed"></i> Quản lý phòng
+              <i class="fas fa-chevron-down" style="font-size: 10px"></i>
+            </a>
+            <ul class="submenu" id="roomSub">
+              <li><a href="roomtype.html">Quản lý loại phòng</a></li>
+              <li><a href="room.html">Quản lý phòng</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="room-util.html"
+              ><i class="fas fa-concierge-bell"></i>Quản lý tiện ích<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+          <!-- <li>
+            <a
+              href="javascript:void(0)"
+              onclick="$('#utilSub').toggleClass('show')"
+            >
+              <i class="fas fa-concierge-bell"></i> Quản lý tiện ích
+              <i class="fas fa-chevron-down" style="font-size: 10px"></i>
+            </a>
+            <ul class="submenu" id="utilSub">
+              <li><a href="hotel-util.html">Tiện ích khách sạn</a></li>
+              <li><a href="room-util.html">Tiện ích phòng</a></li>
+            </ul>
+          </li> -->
+        </ul>
+
+        <div class="nav-group-label">Kinh doanh</div>
+        <ul class="side-nav">
+          <li>
+            <a href="voucher.html"
+              ><i class="fas fa-ticket-alt"></i>Mã giảm giá<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+          <li>
+            <a href="bill.html"
+              ><i class="fas fa-file-invoice-dollar"></i> Quản lý đơn đặt
+              phòng<i class="fas fa-chevron-down-o"></i
+            ></a>
+          </li>
+          <li>
+            <a href="review.html"
+              ><i class="fas fa-comment-alt"></i> Đánh giá của khách<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+          <li>
+            <a href="chat.html" class="active"
+              ><i class="fas fa-comments"></i> Hỗ trợ khách hàng<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+        </ul>
+
+        <div class="nav-group-label">Hệ thống</div>
+        <ul class="side-nav">
+          <li>
+            <a href="profile.html"
+              ><i class="fas fa-user-cog"></i> Thông tin tài khoản<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+          <li>
+            <a
+              href="javascript:void(0)"
+              onclick="logout()"
+              style="color: var(--danger)"
+              ><i class="fas fa-sign-out-alt"></i> Đăng xuất<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div style="width: 400px; position: relative"></div>
+        <div class="d-flex align-items-center gap-4">
+          <div
+            class="d-flex align-items-center gap-2"
+            style="cursor: pointer"
+            onclick="location.href = 'profile.html'"
+          >
+            <div
+              style="
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+                background: var(--primary-light);
+                color: var(--primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 800;
+              "
+            >
+              M
+            </div>
+            <span style="font-weight: 600; font-size: 14px; margin-left: 10px"
+              >Manager</span
+            >
+          </div>
+        </div>
+      </header>
+
+      <div class="chat-container">
+        <div class="chat-list">
+          <div class="chat-list-header">Hỗ trợ khách hàng</div>
+          <div class="chat-partners" id="partnerList"></div>
+        </div>
+
+        <div class="chat-window">
+          <div class="chat-header" id="chatHeader" style="display: none">
+            <img id="activePartnerAvatar" src="" alt="" />
+            <div class="chat-header-info">
+              <h4
+                id="activePartnerName"
+                style="font-weight: 600; font-size: 20px; margin: 0"
+              ></h4>
+              <p
+                id="activeHotelContext"
+                style="font-size: 12px; color: var(--primary); margin: 0"
+              ></p>
+            </div>
+          </div>
+
+          <div class="chat-messages" id="messageList">
+            <div
+              style="
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                color: var(--text-muted);
+                text-align: center;
+              "
+            >
+              <i
+                class="fab fa-facebook-messenger"
+                style="font-size: 80px; color: #f0f2f5; margin-bottom: 20px"
+              ></i>
+              <h5 style="font-weight: 700">Hãy chọn một tin nhắn</h5>
+            </div>
+          </div>
+
+          <div
+            class="chat-input-container"
+            id="inputContainer"
+            style="display: none"
+          >
+            <div id="replyBar">
+              <div class="reply-content">
+                <b id="replyToUser"></b>
+                <span id="replyToText"></span>
+              </div>
+              <div class="close-reply" onclick="cancelReply()">&times;</div>
+            </div>
+
+            <div id="previewImages" class="preview-container"></div>
+            <div class="chat-input-wrapper">
+              <div class="icon-btn" title="Gửi ảnh">
+                <i class="fas fa-image"></i>
+                <input type="file" id="fileInput" multiple accept="image/*" />
+              </div>
+              <input type="text" id="chatInput" placeholder="Aa" />
+              <div class="icon-btn" id="sendBtn">
+                <i class="fas fa-paper-plane"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="previewGallery" class="gallery-overlay">
+      <div class="gallery-content">
+        <span class="close" onclick="closePreviewGallery()">&times;</span>
+        <div class="gallery-main">
+          <img id="previewMainImage" class="gallery-main-img" src="" />
+          <button class="g-nav prev" onclick="changePreviewSlide(-1)">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="g-nav next" onclick="changePreviewSlide(1)">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+        <div class="gallery-thumbs" id="previewThumbs"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+    <script>
+      const API_BASE = "/api/chat";
+      const token = localStorage.getItem("accessToken");
+      let myId = null;
+      let activePartnerId = null;
+      let activeHotelId = null;
+      let stompClient = null;
+      let pendingFiles = [];
+      let allConversationImages = [];
+      let previewIdx = 0;
+      let replyToId = null;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        if (!token) {
+          window.location.href = "/login.html";
+          return;
+        }
+        myId = getMyId();
+        loadPartners();
+        connectSocket();
+      });
+
+      function getMyId() {
+        try {
+          const p = JSON.parse(atob(token.split(".")[1]));
+          return p.userId || p.id;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      async function loadPartners() {
+        const res = await fetch(`${API_BASE}/partners`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const partners = await res.json();
+        renderPartners(partners);
+      }
+
+      function renderPartners(partners) {
+        const list = document.getElementById("partnerList");
+        list.innerHTML = "";
+        partners.forEach((p) => {
+          const displayName = p.username || p.userName || p.fullName;
+          const isUnread = p.unreadCount > 0;
+          const div = document.createElement("div");
+          div.className = `chat-item ${isUnread ? "unread" : ""} ${p.userId == activePartnerId && p.hotelId == activeHotelId ? "active" : ""}`;
+          div.onclick = () =>
+            selectPartner(p.userId, displayName, p.hotelId, p.hotelName);
+
+          div.innerHTML = `
+          <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random" alt="">
+          <div class="chat-item-info">
+            <div class="chat-item-name">${displayName}</div>
+            <div class="chat-item-last">${p.lastMessage || "Bắt đầu trò chuyện"}</div>
+          </div>
+          ${isUnread ? `<div class="unread-dot"></div>` : ""}
+        `;
+          list.appendChild(div);
+        });
+      }
+
+      async function selectPartner(partnerId, partnerName, hotelId, hotelName) {
+        activePartnerId = partnerId;
+        activeHotelId = hotelId;
+        document.getElementById("chatHeader").style.display = "flex";
+        document.getElementById("inputContainer").style.display = "block";
+        document.getElementById("activePartnerName").textContent = partnerName;
+        document.getElementById("activeHotelContext").textContent = hotelName
+          ? ``
+          : "";
+        document.getElementById("activePartnerAvatar").src =
+          `https://ui-avatars.com/api/?name=${encodeURIComponent(partnerName)}&background=random`;
+
+        await loadMessages(partnerId);
+        await markAsRead(partnerId);
+        loadPartners();
+        cancelReply();
+      }
+
+      async function loadMessages(partnerId) {
+        const res = await fetch(`${API_BASE}/messages/${partnerId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const messages = await res.json();
+        renderMessages(messages);
+      }
+
+      function renderMessages(messages) {
+        const list = document.getElementById("messageList");
+        list.innerHTML = "";
+        allConversationImages = [];
+        const filtered = messages.filter((m) => m.hotelId == activeHotelId);
+        const partnerName =
+          document.getElementById("activePartnerName").textContent;
+
+        let lastTime = null;
+
+        filtered.forEach((m, index) => {
+          const isLast = index === filtered.length - 1;
+          const mTime = new Date(m.createdAt);
+
+          // Hiển thị mốc thời gian nếu là tin đầu tiên hoặc cách tin trước > 15 phút
+          if (!lastTime || mTime - lastTime > 15 * 60 * 1000) {
+            const timeDiv = document.createElement("div");
+            timeDiv.className = "msg-time-separator";
+            timeDiv.textContent = `${mTime.getHours().toString().padStart(2, "0")}:${mTime.getMinutes().toString().padStart(2, "0")} ${mTime.getDate().toString().padStart(2, "0")}/${(mTime.getMonth() + 1).toString().padStart(2, "0")}/${mTime.getFullYear()}`;
+            list.appendChild(timeDiv);
+          }
+          lastTime = mTime;
+
+          const isMe = m.senderId == myId;
+          const row = document.createElement("div");
+          row.className = `message-row ${isMe ? "me" : "other"}`;
+
+          const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(isMe ? "Me" : partnerName)}&background=random`;
+
+          let replyLineHtml = "";
+          let quotedMsgHtml = "";
+          if (m.replyToId) {
+            const replierName = isMe ? "Bạn" : partnerName;
+            const repliedToName = m.replyToUser || "người dùng";
+            replyLineHtml = `<div class="msg-reply-line"><i class="fas fa-reply"></i> ${replierName} đã trả lời</div>`;
+            quotedMsgHtml = `<div class="msg-quoted-content" onclick="scrollToMessage(${m.replyToId})">${m.replyToContent || "Hình ảnh"}</div>`;
+          }
+
+          let imagesHtml = "";
+          if (m.images && m.images.length > 0) {
+            imagesHtml = renderImageGrid(m.images);
+            allConversationImages.push(...m.images);
+          }
+
+          const currentSenderNameForIcon = isMe ? "Bạn" : partnerName;
+          const msgText =
+            m.content || (m.images && m.images.length > 0 ? "[Hình ảnh]" : "");
+
+          row.innerHTML = `
+          ${!isMe ? `<img src="${avatarUrl}" class="msg-avatar">` : ""}
+          <div class="message-wrapper" id="msg-${m.chatId}">
+            ${replyLineHtml}
+            ${quotedMsgHtml}
+            <div class="msg-bubble">
+              ${
+                m.isDeleted
+                  ? '<i style="color: gray">Tin nhắn đã bị gỡ</i>'
+                  : `
+        ${imagesHtml}
+        ${m.content ? `<div class="msg-text">${m.content}</div>` : ""}
+      `
+              }
+              <div class="msg-actions">
+                <div class="action-item" onclick="startReply(${m.chatId}, '${currentSenderNameForIcon}', '${msgText.replace(/'/g, "\\'")}')" title="Trả lời"><i class="fas fa-reply"></i></div>
+                ${
+                  isMe && !m.isDeleted
+                    ? `
+                  <div class="action-item" onclick="deleteMsg(${m.chatId})" title="Gỡ"><i class="fas fa-trash"></i></div>
+                `
+                    : ""
+                }
+              </div>
+            </div>
+            <div class="msg-status">
+              ${isMe && isLast ? `${new Date(m.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} • ${m.isRead ? "Đã xem" : "Đã gửi"}` : ""}
+            </div>
+          </div>
+        `;
+          list.appendChild(row);
+        });
+        list.scrollTop = list.scrollHeight;
+      }
+
+      function scrollToMessage(id) {
+        const el = document.getElementById(`msg-${id}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          el.classList.add("highlight-msg");
+          setTimeout(() => el.classList.remove("highlight-msg"), 2000);
+        }
+      }
+
+      function renderImageGrid(images) {
+        const count = images.length;
+        return `<div class="msg-images" onclick="openPreviewGallery('${images[0]}')">
+                <img src="${images[0]}">
+                ${count > 1 ? `<div class="image-overlay">+${count - 1}</div>` : ""}
+              </div>`;
+      }
+
+      function startReply(id, user, text) {
+        replyToId = id;
+        document.getElementById("replyToUser").textContent =
+          `Đang trả lời ${user}`;
+        document.getElementById("replyToText").textContent = text;
+        document.getElementById("replyBar").style.display = "flex";
+        document.getElementById("chatInput").focus();
+      }
+
+      function cancelReply() {
+        replyToId = null;
+        document.getElementById("replyBar").style.display = "none";
+      }
+
+      async function sendMessage() {
+        const content = document.getElementById("chatInput").value.trim();
+        if (!content && pendingFiles.length === 0) return;
+        let urls = [];
+        if (pendingFiles.length > 0) {
+          const fd = new FormData();
+          pendingFiles.forEach((f) => fd.append("files", f));
+          const res = await fetch(`${API_BASE}/upload`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` },
+            body: fd,
+          });
+          urls = await res.json();
+        }
+        await fetch(`${API_BASE}/send`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            recipientId: activePartnerId,
+            hotelId: activeHotelId,
+            content: content,
+            images: urls,
+            replyToId: replyToId,
+          }),
+        });
+        document.getElementById("chatInput").value = "";
+        pendingFiles = [];
+        renderPreview();
+        cancelReply();
+        loadMessages(activePartnerId);
+        loadPartners();
+      }
+
+      document.getElementById("chatInput").onkeypress = (e) => {
+        if (e.key === "Enter") sendMessage();
+      };
+      document.getElementById("sendBtn").onclick = sendMessage;
+
+      document.getElementById("fileInput").onchange = (e) => {
+        pendingFiles = [...pendingFiles, ...Array.from(e.target.files)];
+        renderPreview();
+      };
+
+      function renderPreview() {
+        const container = document.getElementById("previewImages");
+        container.innerHTML = "";
+        pendingFiles.forEach((file, index) => {
+          const div = document.createElement("div");
+          div.className = "preview-item";
+          div.innerHTML = `<img src="${URL.createObjectURL(file)}"><div class="remove-btn" onclick="pendingFiles.splice(${index}, 1); renderPreview()">×</div>`;
+          container.appendChild(div);
+        });
+      }
+
+      async function deleteMsg(chatId) {
+        if (!confirm("Gỡ tin nhắn này?")) return;
+        await fetch(`${API_BASE}/delete/${chatId}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        loadMessages(activePartnerId);
+      }
+
+      function openPreviewGallery(url) {
+        previewIdx = allConversationImages.findIndex(
+          (img) => img === url || img.endsWith(url) || url.endsWith(img),
+        );
+        if (previewIdx === -1) previewIdx = 0;
+        document.getElementById("previewGallery").style.display = "flex";
+        renderPreviewGallery();
+      }
+
+      function renderPreviewGallery() {
+        const thumbs = document.getElementById("previewThumbs");
+        thumbs.innerHTML = "";
+        allConversationImages.forEach((img, index) => {
+          const el = document.createElement("img");
+          el.src = img;
+          el.className = index === previewIdx ? "active" : "";
+          el.onclick = () => {
+            previewIdx = index;
+            updateMainImage();
+          };
+          thumbs.appendChild(el);
+        });
+        updateMainImage();
+      }
+
+      function updateMainImage() {
+        document.getElementById("previewMainImage").src =
+          allConversationImages[previewIdx];
+        const thumbs = document.getElementById("previewThumbs").children;
+        [...thumbs].forEach((t, i) =>
+          t.classList.toggle("active", i === previewIdx),
+        );
+        if (thumbs[previewIdx])
+          thumbs[previewIdx].scrollIntoView({
+            behavior: "smooth",
+            inline: "center",
+          });
+      }
+
+      function changePreviewSlide(step) {
+        previewIdx =
+          (previewIdx + step + allConversationImages.length) %
+          allConversationImages.length;
+        updateMainImage();
+      }
+
+      function closePreviewGallery() {
+        document.getElementById("previewGallery").style.display = "none";
+      }
+      async function markAsRead(pId) {
+        await fetch(`${API_BASE}/read/${pId}`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+
+      function connectSocket() {
+        const socket = new SockJS("/chat-socket");
+        stompClient = Stomp.over(socket);
+        stompClient.debug = null;
+        stompClient.connect({}, () => {
+          stompClient.subscribe(`/topic/chat/${myId}`, (msg) => {
+            const chat = JSON.parse(msg.body);
+            if (
+              chat.senderId == activePartnerId ||
+              chat.recipientId == activePartnerId
+            )
+              loadMessages(activePartnerId);
+            loadPartners();
+          });
+        });
+      }
+
+      function logout() {
+        Swal.fire({
+          title: "Xác nhận đăng xuất?",
+          text: "Bạn sẽ quay lại màn hình đăng nhập.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Xác nhận",
+          cancelButtonText: "Hủy",
+          confirmButtonColor: "#ef4444",
+        }).then((res) => {
+          if (res.isConfirmed) {
+            localStorage.clear();
+            window.location.href = "/login.html";
+          }
+        });
+      }
+    </script>
+
+    <!-- <script src="/js/chatbot.js" defer></script> -->
+  </body>
+</html>

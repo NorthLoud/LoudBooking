@@ -1,0 +1,1995 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý loại phòng | Manager</title>
+
+    <!-- External Assets -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+      :root {
+        --primary: #4f46e5;
+        --primary-light: #eef2ff;
+        --secondary: #64748b;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --info: #0ea5e9;
+        --bg-body: #f1f5f9;
+        --sidebar-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --radius-lg: 16px;
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+      .logo-text {
+        font-family: "Outfit", sans-serif;
+      }
+      body {
+        background-color: var(--bg-body);
+        color: var(--text-main);
+        display: flex;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* --- Sidebar (Same as Bill) --- */
+      .sidebar {
+        width: 260px;
+        background: var(--sidebar-bg);
+        border-right: 1px solid #e2e8f0;
+        position: fixed;
+        height: 100vh;
+        z-index: 1000;
+        padding: 30px 15px;
+      }
+      .logo-box {
+        padding: 0 15px 30px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--primary);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+      }
+      .logo-text {
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--text-main);
+      }
+      .nav-group-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        letter-spacing: 1px;
+      }
+      .side-nav {
+        list-style: none;
+        margin-top: 10px;
+      }
+      .side-nav a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 15px;
+        border-radius: 10px;
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        transition: 0.2s;
+        margin-bottom: 4px;
+      }
+      .side-nav a:hover,
+      .side-nav a.active {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+      .side-nav a i:first-child {
+        width: 24px;
+        font-size: 18px;
+      }
+      .submenu {
+        list-style: none;
+        padding-left: 35px;
+        margin-top: 4px;
+        display: none;
+      }
+      .submenu.show {
+        display: block;
+      }
+
+      /* --- Main Wrapper --- */
+      .main-wrapper {
+        flex: 1;
+        margin-left: 260px;
+      }
+      .top-bar {
+        height: 70px;
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        position: sticky;
+        top: 0;
+        z-index: 900;
+      }
+      .content-body {
+        padding: 40px;
+      }
+
+      .page-header {
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+      .page-header h2 {
+        font-size: 28px;
+        font-weight: 800;
+      }
+
+      /* Table Card */
+      .table-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+      }
+      .table-header {
+        padding: 20px 25px;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f8fafc;
+      }
+
+      .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .admin-table th {
+        background: #f8fafc;
+        padding: 15px 15px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        border-bottom: 1px solid #e2e8f0;
+        text-align: left;
+      }
+      .admin-table td {
+        padding: 15px 25px;
+        font-size: 14px;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+      }
+      .room-img-mini {
+        width: 120px;
+        height: 80px;
+        border-radius: 8px;
+        object-fit: cover;
+        background: #f1f5f9;
+      }
+
+      /* Spec Icons */
+      .spec-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 600;
+        background: #f1f5f9;
+        padding: 3px 8px;
+        border-radius: 6px;
+        margin-right: 5px;
+      }
+      .spec-item i {
+        font-size: 12px;
+        color: var(--primary);
+      }
+
+      /* Form Styling */
+      .form-group label {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .form-control {
+        border-radius: 12px;
+        border: 1.5px solid #e2e8f0;
+        font-size: 14px;
+        transition: 0.3s;
+        width: 100%;
+      }
+      .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-light);
+        outline: none;
+      }
+
+      /* Hidden select element since we use custom dropdown */
+      select.form-control {
+        display: none !important;
+      }
+
+      /* Custom Select Box Styling */
+      .custom-select-wrapper {
+        position: relative;
+        display: inline-block;
+        user-select: none;
+        vertical-align: middle;
+      }
+
+      .custom-select-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        height: 42px;
+        background-color: #ffffff;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-main);
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        transition: all 0.2s ease-in-out;
+        width: 100%;
+      }
+
+      .custom-select-wrapper:hover .custom-select-trigger {
+        background-color: #f8fafc;
+        border-color: var(--primary);
+      }
+
+      .custom-select-wrapper.open .custom-select-trigger {
+        background-color: #ffffff;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--primary-light);
+      }
+
+      .custom-select-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        color: var(--primary);
+        transition: transform 0.2s ease;
+        margin-left: 10px;
+      }
+
+      .custom-select-wrapper.open .custom-select-arrow {
+        transform: rotate(180deg);
+      }
+
+      .custom-select-options {
+        position: absolute;
+        display: block;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin-top: 8px;
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        z-index: 1050;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        max-height: 250px;
+        overflow-y: auto;
+      }
+
+      .custom-select-wrapper.open .custom-select-options {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .custom-option {
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        text-align: left;
+      }
+
+      .custom-option:hover {
+        background-color: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .custom-option.selected {
+        background-color: var(--primary);
+        color: #ffffff;
+      }
+
+      .custom-select-search-box {
+        position: sticky;
+        top: 0;
+        background-color: #ffffff;
+        padding: 8px 12px;
+        border-bottom: 1px solid #e2e8f0;
+        z-index: 10;
+      }
+      .custom-select-search-input {
+        width: 100%;
+        height: 36px;
+        padding: 0 12px;
+        font-size: 13px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 8px;
+        outline: none;
+        transition: all 0.2s ease-in-out;
+      }
+      .custom-select-search-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-light);
+      }
+
+      /* Adjust trigger height for form groups in modals */
+      .modal-body .custom-select-trigger {
+        height: 46px;
+      }
+
+      /* Action Buttons */
+      .btn-action {
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: var(--secondary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+        cursor: pointer;
+      }
+      .btn-action:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: var(--primary-light);
+      }
+
+      .btn-luxury {
+        padding: 10px 25px;
+        border-radius: 12px;
+        font-weight: 700;
+        transition: 0.3s;
+      }
+      .action-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+      }
+
+      .spec-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .spec-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 600;
+        background: #f1f5f9;
+        padding: 6px 10px;
+        border-radius: 8px;
+        margin: 0; /* bỏ margin cũ */
+      }
+
+      /* Toolbar */
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 16px;
+      }
+      .toolbar-left {
+        display: flex;
+        gap: 8px;
+      }
+      .toolbar-right {
+        display: flex;
+        align-items: center;
+        min-width: 320px;
+      }
+      /* Search Box */
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: white;
+        border-radius: 12px;
+        border: 1.5px solid #e2e8f0;
+        padding: 0 12px;
+        transition: 0.3s;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      .search-box:focus-within {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-light);
+      }
+      .search-box input {
+        border: none;
+        background: transparent;
+        flex: 1;
+        padding: 10px 4px;
+        font-size: 14px;
+        outline: none;
+        color: var(--text-main);
+      }
+      .search-box input::placeholder {
+        color: #cbd5e1;
+      }
+      .search-box button {
+        background: none;
+        border: none;
+        color: var(--secondary);
+        cursor: pointer;
+        font-size: 16px;
+        padding: 4px;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .search-box button:hover {
+        color: var(--primary);
+      }
+
+      .pagination {
+        list-style: none;
+        display: flex;
+        gap: 4px;
+        margin: 0;
+        justify-content: center;
+      }
+
+      .page-item {
+        margin: 0;
+      }
+
+      .page-item .page-link {
+        padding: 6px 10px;
+        font-size: 13px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+        color: var(--secondary);
+        transition: 0.2s;
+        min-width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+      }
+
+      .page-item .page-link:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: var(--primary-light);
+      }
+
+      .page-item.active .page-link {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+      }
+
+      .page-item.disabled .page-link {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Preview Image */
+      .preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .preview-item {
+        width: 110px;
+        height: 80px;
+        border-radius: 10px;
+        position: relative;
+        border: 2px solid #e2e8f0;
+        overflow: hidden;
+      }
+      .preview-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .preview-item .remove-btn {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 22px;
+        height: 22px;
+        background: var(--danger);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        cursor: pointer;
+      }
+
+      .modal-body {
+        padding: 30px;
+      }
+
+      /* Badge dot for notification */
+      .badge-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--danger);
+        border-radius: 50%;
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        border: 2px solid white;
+      }
+
+      /* Gallery Overlay */
+      .gallery-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+      }
+      .gallery-content {
+        position: relative;
+        width: 900px;
+        max-width: 95%;
+        background: white;
+        border-radius: 24px;
+        padding: 25px;
+      }
+      .gallery-main-img {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+        border-radius: 15px;
+      }
+
+      /* Action Buttons */
+      .btn-action {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: var(--secondary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+        cursor: pointer;
+        font-size: 15px;
+        margin: 0 2px;
+      }
+      .btn-action:hover {
+        background: #f8fafc;
+        border-color: var(--primary);
+        color: var(--primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+      .btn-action.text-danger:hover {
+        border-color: var(--danger);
+        color: var(--danger);
+        background: #fef2f2;
+      }
+      /* Gallery Thumbnails */
+      .gallery-main {
+        position: relative;
+      }
+
+      .gallery-thumbs {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        overflow-x: auto;
+      }
+
+      .gallery-thumbs img {
+        width: 120px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        cursor: pointer;
+        opacity: 0.5;
+        border: 2px solid transparent;
+        transition: 0.3s;
+      }
+
+      .gallery-thumbs img:hover {
+        opacity: 0.8;
+      }
+
+      .gallery-thumbs img.active {
+        opacity: 1;
+        border: 3px solid #4f46e5;
+        transform: scale(1.08);
+      }
+
+      .g-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 45px;
+        height: 45px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.55);
+        color: white;
+        cursor: pointer;
+      }
+
+      .g-nav.prev {
+        left: 15px;
+      }
+
+      .g-nav.next {
+        right: 15px;
+      }
+    </style>
+
+    <!-- <link rel="stylesheet" href="/css/chatbot.css" /> -->
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="logo-box">
+        <div class="logo-icon"><i class="fas fa-paper-plane"></i></div>
+        <div class="logo-text">LoudBooking</div>
+      </div>
+      <nav>
+        <div class="nav-group-label">Trung tâm điều hành</div>
+        <ul class="side-nav">
+          <li>
+            <a href="dashboard.html"
+              ><i class="fas fa-chart-pie"></i> Dashboard<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+          <li>
+            <a href="hotel.html"
+              ><i class="fas fa-hotel"></i> Thông tin khách sạn<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+          <li>
+            <a
+              href="javascript:void(0)"
+              onclick="$('#roomSub').toggleClass('show')"
+            >
+              <i class="fas fa-bed"></i> Quản lý phòng
+              <i class="fas fa-chevron-down" style="font-size: 10px"></i>
+            </a>
+            <ul class="submenu show" id="roomSub">
+              <li>
+                <a href="roomtype.html" class="active">Quản lý loại phòng</a>
+              </li>
+              <li><a href="room.html">Quản lý phòng</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="room-util.html"
+              ><i class="fas fa-concierge-bell"></i>Quản lý tiện ích<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+          <!-- <li>
+            <a
+              href="javascript:void(0)"
+              onclick="$('#utilSub').toggleClass('show')"
+            >
+              <i class="fas fa-concierge-bell"></i> Quản lý tiện ích
+              <i class="fas fa-chevron-down" style="font-size: 10px"></i>
+            </a>
+            <ul class="submenu" id="utilSub">
+              <li><a href="hotel-util.html">Tiện ích khách sạn</a></li>
+              <li><a href="room-util.html">Tiện ích phòng</a></li>
+            </ul>
+          </li> -->
+        </ul>
+        <div class="nav-group-label">Kinh doanh</div>
+        <ul class="side-nav">
+          <li>
+            <a href="voucher.html"
+              ><i class="fas fa-ticket-alt"></i>Mã giảm giá<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+          <li>
+            <a href="bill.html"
+              ><i class="fas fa-file-invoice-dollar"></i> Quản lý đơn đặt
+              phòng<i class="fas fa-chevron-down-o"></i
+            ></a>
+          </li>
+          <li>
+            <a href="review.html"
+              ><i class="fas fa-comment-alt"></i> Đánh giá của khách<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+          <li>
+            <a href="chat.html"
+              ><i class="fas fa-comments"></i> Hỗ trợ khách hàng<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+        </ul>
+        <div class="nav-group-label">Hệ thống</div>
+        <ul class="side-nav">
+          <li>
+            <a href="profile.html"
+              ><i class="fas fa-user-cog"></i> Thông tin tài khoản<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+          <li>
+            <a
+              href="javascript:void(0)"
+              onclick="logout()"
+              style="color: var(--danger)"
+              ><i class="fas fa-sign-out-alt"></i> Đăng xuất<i
+                class="fas fa-chevron-down-o"
+              ></i
+            ></a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div style="width: 400px; position: relative"></div>
+        <div class="d-flex align-items-center gap-4">
+          <div
+            class="d-flex align-items-center gap-2"
+            style="cursor: pointer"
+            onclick="location.href = 'profile.html'"
+          >
+            <div
+              style="
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+                background: var(--primary-light);
+                color: var(--primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 800;
+              "
+            >
+              M
+            </div>
+            <span style="font-weight: 600; font-size: 14px; margin-left: 10px"
+              >Manager</span
+            >
+          </div>
+        </div>
+      </header>
+
+      <div class="content-body">
+        <div class="page-header">
+          <div>
+            <h2>Quản Lý Loại Phòng</h2>
+            <p style="color: var(--text-muted)">
+              Quản lý thông tin các loại phòng thuộc khách sạn phụ trách
+            </p>
+          </div>
+        </div>
+        <!-- Thanh công cụ -->
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <button
+              class="btn btn-primary btn-luxury"
+              onclick="openAddRoomModal()"
+            >
+              <i class="fas fa-plus" style="margin-right: 6px"></i>Thêm phòng
+            </button>
+          </div>
+
+          <div class="toolbar-right">
+            <div class="search-box">
+              <i
+                class="fas fa-search"
+                style="color: #cbd5e1; font-size: 14px"
+              ></i>
+              <input
+                type="text"
+                id="searchRoomInput"
+                placeholder="Tên, địa chỉ..."
+                onkeyup="searchRoom()"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <h5 style="margin: 0; font-weight: 700; font-size: 16px">
+              Danh sách loại phòng
+            </h5>
+            <span
+              id="roomCount"
+              style="
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--text-muted);
+              "
+              >---</span
+            >
+          </div>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 70px; text-align: center">STT</th>
+                  <th style="width: 70px; text-align: center">Ảnh</th>
+                  <th>Tên loại phòng</th>
+                  <th>Thông tin chi tiết</th>
+                  <th>Giá (VND)</th>
+                  <th>Ngày tạo</th>
+                  <th style="text-align: center">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="roomTableBody">
+                <tr>
+                  <td colspan="6" class="text-center py-5">
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Đang tải dữ
+                    liệu...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding: 20px;
+              border-top: 1px solid #e2e8f0;
+              background: #f8fafc;
+            "
+          >
+            <ul class="pagination" id="pagination"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Room Type Modal -->
+    <div class="modal fade" id="roomModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5
+              class="modal-title"
+              id="roomModalTitle"
+              style="font-weight: 800"
+            >
+              Chi tiết Loại phòng
+            </h5>
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="typeId" />
+            <div class="row">
+              <!-- Hàng 1 -->
+              <div class="col-md-6 form-group">
+                <label>Tên loại phòng</label>
+                <input
+                  type="text"
+                  id="typeName"
+                  class="form-control"
+                  placeholder="VD: Deluxe Double Ocean View"
+                />
+              </div>
+
+              <div class="col-md-6 form-group">
+                <label>Giá niêm yết (VNĐ)</label>
+                <input
+                  type="number"
+                  id="price"
+                  class="form-control"
+                  placeholder="1.200.000"
+                />
+              </div>
+
+              <!-- Hàng 2 -->
+              <div class="col-md-3 form-group">
+                <label>Diện tích (m²)</label>
+                <input
+                  type="number"
+                  id="area"
+                  class="form-control"
+                  placeholder="35"
+                />
+              </div>
+
+              <div class="col-md-3 form-group">
+                <label>Số người</label>
+                <input
+                  type="number"
+                  id="capacity"
+                  class="form-control"
+                  placeholder="2"
+                />
+              </div>
+
+              <div class="col-md-3 form-group">
+                <label>Số giường</label>
+                <input
+                  type="number"
+                  id="bedCount"
+                  class="form-control"
+                  placeholder="1"
+                />
+              </div>
+
+              <div class="col-md-3 form-group">
+                <label>Loại giường</label>
+                <select id="bedType" class="form-control">
+                  <option value="SINGLE">Giường đơn</option>
+                  <option value="DOUBLE">Giường đôi</option>
+                  <option value="QUEEN">Giường Queen</option>
+                  <option value="KING">Giường King</option>
+                </select>
+              </div>
+
+              <!-- Hàng 3 -->
+              <div class="col-md-6 form-group">
+                <label>Mô tả loại phòng</label>
+                <textarea
+                  id="roomDesc"
+                  class="form-control"
+                  rows="2"
+                  placeholder="Thông tin chi tiết về loại phòng..."
+                ></textarea>
+              </div>
+
+              <div class="col-md-6 form-group">
+                <label>Thuộc Khách sạn</label>
+                <div
+                  id="hotelList"
+                  class="hotel-list-box"
+                  style="
+                    max-height: 65px;
+                    border: 1.5px solid #e2e8f0;
+                    border-radius: 12px;
+                    padding: 10px;
+                  "
+                >
+                  <!-- Hotels rendered by JS -->
+                </div>
+              </div>
+
+              <!-- Giữ nguyên -->
+              <div class="col-md-12 form-group">
+                <label>Hình ảnh phòng</label>
+                <div class="d-flex gap-2">
+                  <input
+                    type="file"
+                    id="roomImages"
+                    class="form-control"
+                    multiple
+                    accept="image/*"
+                    onchange="previewImages()"
+                  />
+                  <button
+                    class="btn btn-outline-primary"
+                    style="border-radius: 12px"
+                    onclick="openPreviewGallery()"
+                  >
+                    <i class="fas fa-images"></i>
+                  </button>
+                </div>
+                <div id="imagePreview" class="preview-container"></div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-light btn-luxury" data-dismiss="modal">
+              Hủy
+            </button>
+            <button class="btn btn-primary btn-luxury" onclick="saveRoomType()">
+              Lưu
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gallery Overlay -->
+    <div id="previewGallery" class="gallery-overlay">
+      <div class="gallery-content">
+        <span
+          class="close"
+          style="cursor: pointer; margin-top: -15px"
+          onclick="closePreviewGallery()"
+          >&times;</span
+        >
+
+        <div class="gallery-main">
+          <img id="previewMainImage" class="gallery-main-img" src="" />
+
+          <button class="g-nav prev" onclick="changePreviewSlide(-1)">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          <button class="g-nav next" onclick="changePreviewSlide(1)">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="gallery-thumbs" id="previewThumbs"></div>
+      </div>
+    </div>
+
+    <script>
+      const API_TYPE = "http://localhost:8080/api/room-types";
+      const API_HOTEL = "http://localhost:8080/api/hotels";
+      const API_IMG = "http://localhost:8080/api/room-types/images";
+      const token = localStorage.getItem("accessToken");
+
+      let roomTypes = [];
+      let hotels = [];
+      let currentHotelId = null;
+      let previewFileList = [];
+      let currentTypeImages = [];
+      let currentPage = 0;
+      let totalPages = 0;
+
+      let previewImagesList = [];
+      let previewIdx = 0;
+      let mainImageIndex = -1;
+
+      function convertToCustomDropdown(select) {
+        if (!select || select.dataset.customSelectInit) return;
+        select.dataset.customSelectInit = "true";
+
+        // An select goc
+        select.style.display = "none";
+
+        // Tao wrapper
+        const wrapper = document.createElement("div");
+        wrapper.className = "custom-select-wrapper";
+        if (select.style.width) {
+          wrapper.style.width = select.style.width;
+        } else {
+          wrapper.style.width = "100%";
+        }
+
+        // Chen wrapper vao truoc select va dua select vao trong wrapper
+        select.parentNode.insertBefore(wrapper, select);
+        wrapper.appendChild(select);
+
+        // Tao trigger (nut nhap hien thi gia tri hien tai)
+        const trigger = document.createElement("div");
+        trigger.className = "custom-select-trigger";
+
+        const triggerText = document.createElement("span");
+        triggerText.className = "custom-select-text";
+
+        const arrow = document.createElement("span");
+        arrow.className = "custom-select-arrow";
+        arrow.innerHTML = '<i class="fas fa-chevron-down"></i>';
+
+        trigger.appendChild(triggerText);
+        trigger.appendChild(arrow);
+        wrapper.appendChild(trigger);
+
+        // Tao container option list
+        const optionsContainer = document.createElement("div");
+        optionsContainer.className = "custom-select-options";
+        wrapper.appendChild(optionsContainer);
+
+        let searchInput = null;
+
+        function filterOptions(query) {
+          const normalizedQuery = query
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+          const optDivs = optionsContainer.querySelectorAll(".custom-option");
+          optDivs.forEach((opt) => {
+            const text = opt.innerText
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .toLowerCase();
+            if (text.includes(normalizedQuery)) {
+              opt.style.display = "block";
+            } else {
+              opt.style.display = "none";
+            }
+          });
+        }
+
+        function resetSearch() {
+          if (searchInput) {
+            searchInput.value = "";
+            filterOptions("");
+          }
+        }
+
+        wrapper.resetSearchFunc = resetSearch;
+
+        // Ham rebuild lai danh sach custom options tu select goc
+        function rebuildOptions() {
+          let lastQuery = searchInput ? searchInput.value : "";
+          optionsContainer.innerHTML = "";
+          const options = select.options;
+
+          const selectedOption = select.options[select.selectedIndex];
+          triggerText.innerText = selectedOption ? selectedOption.text : "";
+
+          // Neu co tu 6 options tro len, hien thi o tim kiem
+          if (options.length >= 6) {
+            const searchBox = document.createElement("div");
+            searchBox.className = "custom-select-search-box";
+
+            searchInput = document.createElement("input");
+            searchInput.type = "text";
+            searchInput.className = "custom-select-search-input";
+            searchInput.placeholder = "Tìm kiếm...";
+            searchInput.value = lastQuery;
+
+            searchBox.appendChild(searchInput);
+            optionsContainer.appendChild(searchBox);
+
+            searchBox.addEventListener("click", (e) => {
+              e.stopPropagation();
+            });
+
+            searchInput.addEventListener("input", (e) => {
+              filterOptions(e.target.value);
+            });
+          } else {
+            searchInput = null;
+          }
+
+          for (let i = 0; i < options.length; i++) {
+            const option = options[i];
+            const optDiv = document.createElement("div");
+            optDiv.className = "custom-option";
+            optDiv.innerText = option.text;
+            optDiv.dataset.value = option.value;
+
+            if (option.selected) {
+              optDiv.classList.add("selected");
+              triggerText.innerText = option.text;
+            }
+
+            optDiv.addEventListener("click", (e) => {
+              e.stopPropagation();
+
+              optionsContainer
+                .querySelectorAll(".custom-option")
+                .forEach((opt) => opt.classList.remove("selected"));
+              optDiv.classList.add("selected");
+
+              select.value = option.value;
+              triggerText.innerText = option.text;
+              wrapper.classList.remove("open");
+              resetSearch();
+
+              const event = new Event("change", { bubbles: true });
+              select.dispatchEvent(event);
+            });
+            optionsContainer.appendChild(optDiv);
+          }
+
+          if (lastQuery) {
+            filterOptions(lastQuery);
+          }
+        }
+
+        rebuildOptions();
+
+        // Dong mo dropdown khi nhap vao trigger
+        trigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const isOpen = wrapper.classList.contains("open");
+
+          document.querySelectorAll(".custom-select-wrapper").forEach((w) => {
+            if (w !== wrapper) {
+              w.classList.remove("open");
+              if (w.resetSearchFunc) w.resetSearchFunc();
+            }
+          });
+
+          wrapper.classList.toggle("open");
+
+          if (!isOpen && searchInput) {
+            setTimeout(() => {
+              searchInput.focus();
+            }, 100);
+          } else if (isOpen) {
+            resetSearch();
+          }
+        });
+
+        // Theo doi su thay doi cac phan tu con cua select goc (dung MutationObserver)
+        const observer = new MutationObserver(() => {
+          rebuildOptions();
+        });
+        observer.observe(select, { childList: true });
+
+        // Override property value va selectedIndex cua select element de dong bo nguoc tu code JS cua anh
+        const originalValueSetter = Object.getOwnPropertyDescriptor(
+          HTMLSelectElement.prototype,
+          "value",
+        ).set;
+        Object.defineProperty(select, "value", {
+          set: function (val) {
+            originalValueSetter.call(this, val);
+            rebuildOptions();
+          },
+          get: function () {
+            return Object.getOwnPropertyDescriptor(
+              HTMLSelectElement.prototype,
+              "value",
+            ).get.call(this);
+          },
+        });
+
+        const originalIndexSetter = Object.getOwnPropertyDescriptor(
+          HTMLSelectElement.prototype,
+          "selectedIndex",
+        ).set;
+        Object.defineProperty(select, "selectedIndex", {
+          set: function (val) {
+            originalIndexSetter.call(this, val);
+            rebuildOptions();
+          },
+          get: function () {
+            return Object.getOwnPropertyDescriptor(
+              HTMLSelectElement.prototype,
+              "selectedIndex",
+            ).get.call(this);
+          },
+        });
+      }
+
+      // Tu dong dong tat ca custom dropdown khi click ben ngoai
+      document.addEventListener("click", () => {
+        document.querySelectorAll(".custom-select-wrapper").forEach((w) => {
+          w.classList.remove("open");
+          if (w.resetSearchFunc) w.resetSearchFunc();
+        });
+      });
+
+      async function init() {
+        await Promise.all([loadHotels(), loadRoomTypes(0)]);
+        document.querySelectorAll("select").forEach(convertToCustomDropdown);
+      }
+
+      function getBedTypeVN(type) {
+        const bedTypes = {
+          SINGLE: "Giường đơn",
+          DOUBLE: "Giường đôi",
+          QUEEN: "Giường Queen",
+          KING: "Giường King",
+        };
+
+        return bedTypes[type] || type;
+      }
+
+      async function loadHotels() {
+        const res = await fetch(API_HOTEL + "/my", {
+          headers: { Authorization: "Bearer " + token },
+        });
+
+        hotels = await res.json();
+
+        renderHotelList();
+
+        // AUTO SELECT khách sạn đầu tiên
+        if (hotels.length > 0) {
+          selectHotel(hotels[0].hotelId);
+        }
+      }
+
+      async function loadRoomTypes(page = 0) {
+        const keyword = document.getElementById("searchRoomInput").value;
+        let url = API_TYPE + `/my/summary?page=${page}&size=5`;
+        if (keyword) url += `&keyword=${encodeURIComponent(keyword)}`;
+
+        const res = await fetch(url, {
+          headers: { Authorization: "Bearer " + token },
+        });
+        const data = await res.json();
+        roomTypes = data.content || [];
+        currentPage = data.number;
+        totalPages = data.totalPages;
+
+        document.getElementById("roomCount").innerText =
+          `Tổng cộng: ${data.totalElements || 0} loại phòng`;
+        renderRoomTypes();
+        renderPagination(data);
+      }
+
+      function renderPagination(data) {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        totalPages = data.totalPages;
+        currentPage = data.number;
+
+        if (totalPages <= 1) return;
+
+        const range = 2;
+
+        // Prev
+        const prevLi = document.createElement("li");
+        prevLi.className = "page-item " + (currentPage === 0 ? "disabled" : "");
+
+        prevLi.innerHTML = `
+    <a class="page-link" href="javascript:void(0)">«</a>
+  `;
+
+        prevLi.onclick = () => {
+          if (currentPage > 0) {
+            currentPage--;
+            loadRoomTypes(currentPage);
+          }
+        };
+
+        pagination.appendChild(prevLi);
+
+        // Tính start-end
+        let startPage = currentPage - range;
+        let endPage = currentPage + range;
+
+        if (startPage < 0) {
+          startPage = 0;
+          endPage = Math.min(totalPages - 1, range * 2);
+        }
+
+        if (endPage >= totalPages) {
+          endPage = totalPages - 1;
+          startPage = Math.max(0, totalPages - 1 - range * 2);
+        }
+
+        // Render page numbers
+        for (let i = startPage; i <= endPage; i++) {
+          const li = document.createElement("li");
+
+          li.className = "page-item " + (i === currentPage ? "active" : "");
+
+          li.innerHTML = `
+      <a class="page-link" href="javascript:void(0)">
+        ${i + 1}
+      </a>
+    `;
+
+          li.onclick = () => {
+            currentPage = i;
+            loadRoomTypes(i);
+          };
+
+          pagination.appendChild(li);
+        }
+
+        // Next
+        const nextLi = document.createElement("li");
+
+        nextLi.className =
+          "page-item " + (currentPage === totalPages - 1 ? "disabled" : "");
+
+        nextLi.innerHTML = `
+    <a class="page-link" href="javascript:void(0)">»</a>
+  `;
+
+        nextLi.onclick = () => {
+          if (currentPage < totalPages - 1) {
+            currentPage++;
+            loadRoomTypes(currentPage);
+          }
+        };
+
+        pagination.appendChild(nextLi);
+      }
+
+      function renderRoomTypes() {
+        const tbody = document.getElementById("roomTableBody");
+        tbody.innerHTML = "";
+        roomTypes.forEach((t, index) => {
+          const stt = currentPage * 5 + index + 1;
+
+          tbody.innerHTML += `
+        <tr>
+            <td style="text-align:center; color: var(--text-muted); font-weight: 600;">
+                ${stt}
+            </td>
+            <td>
+                <img src="${getImgUrl(t.mainImage)}" class="room-img-mini">
+            </td>
+            <td>
+                <div style="font-weight:700;">
+                    ${t.typeName}
+                </div>
+                <div style="font-size:11px; color: var(--text-muted);">
+                    <i class="fas fa-building mr-1"></i>
+                    ${t.hotelName}
+                </div>
+            </td>
+            <td>
+    <div class="spec-wrapper">
+        <div class="spec-item">
+            <i class="fas fa-expand"></i> ${t.area} m²
+        </div>
+
+        <div class="spec-item">
+            <i class="fas fa-users"></i> ${t.capacity} người
+        </div>
+
+        <div class="spec-item">
+            <i class="fas fa-bed"></i> 
+            ${t.bedCount} ${getBedTypeVN(t.bedType)}
+        </div>
+    </div>
+</td>
+            <td>
+                <b style="color: var(--primary); font-size:15px;">
+                    ${formatMoney(t.price)}
+                </b>
+            </td>
+            <td style="font-size:12px; color: var(--text-muted);">
+                ${new Date(t.createdAt).toLocaleDateString("vi-VN")}
+            </td>
+            <td>
+                <div class="action-buttons">
+                    <button class="btn-action" onclick="editRoomType(${t.typeId})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+
+                    <button class="btn-action text-danger" onclick="deleteRoomType(${t.typeId})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `;
+        });
+      }
+
+      function renderHotelList() {
+        const box = document.getElementById("hotelList");
+
+        box.innerHTML = hotels
+          .map(
+            (h, index) => `
+        <div 
+          class="d-flex align-items-center mb-2 p-2 hotel-opt"
+          style="
+            border-radius: 8px;
+            cursor:pointer;
+            ${index === 0 ? "background: var(--primary-light);" : ""}
+          "
+          onclick="selectHotel(${h.hotelId})"
+          id="h-opt-${h.hotelId}"
+        >
+          <input
+            type="radio"
+            name="hotelRadio"
+            value="${h.hotelId}"
+            id="rad-${h.hotelId}"
+            class="mr-2"
+            ${index === 0 ? "checked" : ""}
+          >
+
+          <span style="font-size: 13px; font-weight: 600;">
+            ${h.hotelName}
+          </span>
+        </div>
+      `,
+          )
+          .join("");
+      }
+
+      function selectHotel(id) {
+        currentHotelId = id;
+        document
+          .querySelectorAll(".hotel-opt")
+          .forEach((o) => (o.style.background = "transparent"));
+        document.getElementById(`h-opt-${id}`).style.background =
+          "var(--primary-light)";
+        document.getElementById(`rad-${id}`).checked = true;
+      }
+
+      function getImgUrl(path) {
+        if (!path) return "https://via.placeholder.com/150?text=No+Room+Img";
+        return path.startsWith("http") ? path : `http://localhost:8080${path}`;
+      }
+      function formatMoney(v) {
+        return Number(v).toLocaleString();
+      }
+
+      function previewImages() {
+        const input = document.getElementById("roomImages");
+        const files = Array.from(input.files);
+        if (files.length === 0) return;
+
+        // thêm tiếp ảnh mới
+        files.forEach((file) => {
+          previewFileList.push(file);
+        });
+
+        renderPreviewGrid();
+
+        // reset để được chọn tiếp
+        input.value = "";
+      }
+
+      function renderPreviewGrid() {
+        const container = document.getElementById("imagePreview");
+        container.innerHTML = "";
+
+        /* ===== ẢNH CŨ ===== */
+        currentTypeImages.forEach((img, index) => {
+          const div = document.createElement("div");
+          div.className = "preview-item";
+
+          const isMain =
+            index === mainImageIndex || (img.main && mainImageIndex === -1);
+
+          div.style.border = isMain ? "3px solid #10b981" : "2px solid #e2e8f0";
+
+          const image = document.createElement("img");
+          image.src = getImgUrl(img.imageUrl);
+
+          image.onclick = () => {
+            mainImageIndex = index;
+            renderPreviewGrid();
+          };
+
+          const del = document.createElement("div");
+          del.className = "remove-btn";
+          del.innerHTML = "&times;";
+
+          del.onclick = (e) => {
+            e.stopPropagation(); // 🔥 QUAN TRỌNG
+            deleteExistingImg(img.imageId);
+          };
+
+          div.appendChild(image);
+          div.appendChild(del);
+          container.appendChild(div);
+        });
+
+        /* ===== ẢNH MỚI ===== */
+        previewFileList.forEach((file, idx) => {
+          const reader = new FileReader();
+
+          reader.onload = (e) => {
+            const div = document.createElement("div");
+            div.className = "preview-item";
+
+            const realIndex = currentTypeImages.length + idx;
+
+            div.style.border =
+              realIndex === mainImageIndex
+                ? "3px solid #10b981"
+                : "2px solid #e2e8f0";
+
+            const img = document.createElement("img");
+            img.src = e.target.result;
+
+            img.onclick = () => {
+              mainImageIndex = realIndex;
+              renderPreviewGrid();
+            };
+
+            const del = document.createElement("div");
+            del.className = "remove-btn";
+            del.innerHTML = "&times;";
+
+            del.onclick = (e) => {
+              e.stopPropagation(); // 🔥 QUAN TRỌNG
+              removePreview(idx);
+            };
+
+            div.appendChild(img);
+            div.appendChild(del);
+            container.appendChild(div);
+          };
+
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function removePreview(idx) {
+        const realIndex = currentTypeImages.length + idx;
+
+        if (mainImageIndex === realIndex) {
+          mainImageIndex = -1;
+        } else if (mainImageIndex > realIndex) {
+          mainImageIndex--;
+        }
+
+        previewFileList.splice(idx, 1);
+
+        renderPreviewGrid();
+      }
+
+      async function deleteExistingImg(imageId) {
+        const index = currentTypeImages.findIndex(
+          (img) => img.imageId === imageId,
+        );
+
+        await fetch(`${API_IMG}/${imageId}`, {
+          method: "DELETE",
+          headers: { Authorization: "Bearer " + token },
+        });
+
+        currentTypeImages.splice(index, 1);
+
+        // 🔥 FIX MAIN INDEX
+        if (index === mainImageIndex) {
+          mainImageIndex = -1;
+        } else if (index < mainImageIndex) {
+          mainImageIndex--;
+        }
+
+        renderPreviewGrid();
+      }
+
+      async function saveRoomType() {
+        if (!currentHotelId)
+          return Swal.fire(
+            "Thiếu thông tin",
+            "Vui lòng chọn khách sạn!",
+            "warning",
+          );
+        const id = document.getElementById("typeId").value;
+        const body = {
+          typeName: document.getElementById("typeName").value,
+          price: document.getElementById("price").value,
+          area: document.getElementById("area").value,
+          capacity: document.getElementById("capacity").value,
+          bedCount: document.getElementById("bedCount").value,
+          bedType: document.getElementById("bedType").value,
+          description: document.getElementById("roomDesc").value,
+        };
+
+        const method = id ? "PUT" : "POST";
+
+        const url = id
+          ? `${API_TYPE}/${id}`
+          : `${API_TYPE}/hotel/${currentHotelId}`;
+
+        const res = await fetch(url, {
+          method: method,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify(body),
+        });
+        if (res.ok) {
+          const saved = await res.json();
+          // ===== SET MAIN CHO ẢNH CŨ =====
+          if (
+            mainImageIndex >= 0 &&
+            mainImageIndex < currentTypeImages.length
+          ) {
+            const mainId = currentTypeImages[mainImageIndex].imageId;
+
+            await fetch(`${API_IMG}/${mainId}/main`, {
+              method: "PUT",
+              headers: { Authorization: "Bearer " + token },
+            });
+          }
+          if (previewFileList.length > 0) {
+            const fd = new FormData();
+            previewFileList.forEach((f) => fd.append("files", f));
+            let newMain = -1;
+
+            if (mainImageIndex >= currentTypeImages.length) {
+              newMain = mainImageIndex - currentTypeImages.length;
+            }
+
+            fd.append("mainIndex", newMain);
+            await fetch(`${API_TYPE}/${saved.typeId}/images`, {
+              method: "POST",
+              headers: { Authorization: "Bearer " + token },
+              body: fd,
+            });
+          }
+          Swal.fire("Thành công", "Đã lưu thông tin loại phòng.", "success");
+          $("#roomModal").modal("hide");
+          loadRoomTypes();
+        }
+      }
+
+      async function editRoomType(id) {
+        const t = roomTypes.find((x) => x.typeId === id);
+        document.getElementById("typeId").value = t.typeId;
+        document.getElementById("typeName").value = t.typeName;
+        document.getElementById("price").value = t.price;
+        document.getElementById("area").value = t.area;
+        document.getElementById("capacity").value = t.capacity;
+        document.getElementById("bedCount").value = t.bedCount;
+        document.getElementById("bedType").value = t.bedType;
+        document.getElementById("roomDesc").value = t.description || "";
+        document.getElementById("roomModalTitle").innerText =
+          "Sửa thông tin loại phòng";
+
+        selectHotel(t.hotelId);
+        const imgRes = await fetch(`${API_TYPE}/${id}/images`, {
+          headers: { Authorization: "Bearer " + token },
+        });
+        currentTypeImages = await imgRes.json();
+        previewFileList = [];
+        renderPreviewGrid();
+        $("#roomModal").modal("show");
+      }
+
+      async function deleteRoomType(id) {
+        const confirm = await Swal.fire({
+          title: "Xác nhận xóa?",
+          text: "Xóa loại phòng này sẽ ảnh hưởng đến các phòng thuộc loại này!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Xác nhận",
+          cancelButtonText: "Hủy",
+          confirmButtonColor: "#ef4444",
+        });
+
+        if (!confirm.isConfirmed) return;
+
+        const response = await fetch(`${API_TYPE}/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+
+        // Backend báo lỗi
+        if (!response.ok) {
+          let errorMessage = "Xóa thất bại";
+
+          try {
+            const errorData = await response.json();
+
+            errorMessage = errorData.message || errorData.error || errorMessage;
+          } catch (e) {}
+
+          Swal.fire("Không thể xóa", errorMessage, "error");
+
+          return;
+        }
+
+        Swal.fire("Thành công", "Đã xóa loại phòng", "success");
+
+        loadRoomTypes(currentPage);
+      }
+
+      function openPreviewGallery() {
+        previewImagesList = [];
+
+        let mainImage = null;
+
+        currentTypeImages.forEach((img, index) => {
+          const url = getImgUrl(img.imageUrl);
+
+          if (img.main && !mainImage) {
+            mainImage = url;
+          } else {
+            previewImagesList.push(url);
+          }
+        });
+
+        previewFileList.forEach((file) => {
+          previewImagesList.push(URL.createObjectURL(file));
+        });
+
+        if (mainImage) previewImagesList.unshift(mainImage);
+
+        if (previewImagesList.length === 0) {
+          alert("Không có ảnh!");
+          return;
+        }
+
+        previewIdx = 0;
+        document.getElementById("previewGallery").style.display = "flex";
+
+        renderPreviewGallery();
+      }
+
+      function renderPreviewGallery() {
+        const thumbs = document.getElementById("previewThumbs");
+        thumbs.innerHTML = "";
+
+        previewImagesList.forEach((img, index) => {
+          const el = document.createElement("img");
+          el.src = img;
+
+          el.onclick = () => {
+            previewIdx = index;
+            updateMainImage();
+          };
+
+          thumbs.appendChild(el);
+        });
+
+        updateMainImage();
+      }
+
+      function updateMainImage() {
+        document.getElementById("previewMainImage").src =
+          previewImagesList[previewIdx];
+
+        updateActiveThumb();
+      }
+
+      function updateActiveThumb() {
+        const thumbs = document.getElementById("previewThumbs");
+
+        [...thumbs.children].forEach((img, i) => {
+          img.classList.toggle("active", i === previewIdx);
+        });
+
+        thumbs.children[previewIdx].scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest",
+        });
+      }
+
+      function changePreviewSlide(step) {
+        previewIdx =
+          (previewIdx + step + previewImagesList.length) %
+          previewImagesList.length;
+
+        updateMainImage();
+      }
+
+      function closePreviewGallery() {
+        document.getElementById("previewGallery").style.display = "none";
+      }
+      function openAddRoomModal() {
+        document.getElementById("typeId").value = "";
+        document.getElementById("typeName").value = "";
+        document.getElementById("price").value = "";
+        document.getElementById("area").value = "";
+        document.getElementById("capacity").value = "";
+        document.getElementById("bedCount").value = "";
+        document.getElementById("roomDesc").value = "";
+
+        document.getElementById("roomModalTitle").innerText =
+          "Thêm Loại Phòng Mới";
+
+        mainImageIndex = -1;
+        currentTypeImages = [];
+        previewFileList = [];
+        // render lại list hotel
+        renderHotelList();
+        // auto chọn hotel đầu tiên
+        if (hotels.length > 0) {
+          selectHotel(hotels[0].hotelId);
+        }
+
+        renderPreviewGrid();
+        $("#roomModal").modal("show");
+      }
+
+      function searchRoom() {
+        loadRoomTypes(0);
+      }
+      function renderRoomTypesFiltered(data) {
+        const tbody = document.getElementById("roomTableBody");
+        tbody.innerHTML = "";
+        data.forEach((t) => {
+          tbody.innerHTML += `<tr><td><img src="${getImgUrl(t.mainImage)}" class="room-img-mini"></td><td><div style="font-weight: 700;">${t.typeName}</div><div style="font-size: 11px; color: var(--text-muted);">${t.hotelName}</div></td><td><div class="spec-item"><i class="fas fa-expand"></i> ${t.area}m²</div><div class="spec-item"><i class="fas fa-users"></i> ${t.capacity}</div></td><td><b>${formatMoney(t.price)}</b></td><td style="font-size: 12px;">${new Date(t.createdAt).toLocaleDateString("vi-VN")}</td><td class="text-center"><button class="btn-action" onclick="editRoomType(${t.typeId})"><i class="fas fa-edit"></i></button><button class="btn-action text-danger" onclick="deleteRoomType(${t.typeId})"><i class="fas fa-trash"></i></button></td></tr>`;
+        });
+      }
+
+      function logout() {
+        Swal.fire({
+          title: "Xác nhận đăng xuất?",
+          text: "Bạn sẽ quay lại màn hình đăng nhập.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Xác nhận",
+          cancelButtonText: "Hủy",
+          confirmButtonColor: "#ef4444",
+        }).then((res) => {
+          if (res.isConfirmed) {
+            localStorage.clear();
+            window.location.href = "/login.html";
+          }
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+
+    <!-- <script src="/js/chatbot.js" defer></script> -->
+  </body>
+</html>

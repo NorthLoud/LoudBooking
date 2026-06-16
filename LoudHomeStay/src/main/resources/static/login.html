@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập | LoudBooking</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+
+        /* Tone xanh giống trang register */
+        --bg-gradient: linear-gradient(
+          135deg,
+          #dbeafe 0%,
+          #bfdbfe 50%,
+          #93c5fd 100%
+        );
+
+        --glass-bg: rgba(255, 255, 255, 0.92);
+        --glass-border: rgba(255, 255, 255, 0.4);
+
+        --text-main: #1f2937;
+        --text-muted: #4b5563;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        /* giữ ảnh nền nếu bạn muốn */
+        background: url("1.jpg") no-repeat center center / cover;
+
+        position: relative;
+        overflow: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+
+        top: -220px;
+        left: -220px;
+
+        width: 520px;
+        height: 520px;
+
+        background: linear-gradient(135deg, #9dbbff, #c7ddff);
+
+        border-radius: 50%;
+        filter: blur(50px);
+
+        opacity: 0.85;
+      }
+
+      body::after {
+        content: "";
+        position: absolute;
+
+        bottom: -240px;
+        right: -240px;
+
+        width: 560px;
+        height: 560px;
+
+        background: linear-gradient(135deg, #bfe7ff, #dbeafe);
+
+        border-radius: 50%;
+        filter: blur(55px);
+
+        opacity: 0.9;
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+
+        50% {
+          background-position: 100% 50%;
+        }
+
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Decorative blobs */
+
+      .container {
+        width: 900px;
+        max-width: 95%;
+        display: flex;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+        position: relative;
+        z-index: 10;
+      }
+
+      /* Left Side - Info */
+      .info-side {
+        flex: 1;
+        padding: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-right: 1px solid var(--glass-border);
+
+        /* để hiệu ứng loang nằm đúng */
+        position: relative;
+        overflow: hidden;
+
+        /* nền nhẹ */
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .info-side::before {
+        content: "";
+        position: absolute;
+
+        top: -45%;
+        left: -20%;
+
+        width: 140%;
+        height: 100%;
+
+        background: linear-gradient(120deg, #dbeafe, #a5c8ff);
+
+        border-radius: 50%;
+        filter: blur(60px);
+
+        opacity: 0.8;
+        z-index: 0;
+      }
+
+      .info-side > * {
+        position: relative;
+        z-index: 2;
+      }
+
+      .info-side h1 {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--text-main);
+        margin-bottom: 20px;
+        line-height: 1.2;
+      }
+
+      .info-side p {
+        font-size: 16px;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+
+      .brand-logo {
+        margin-bottom: 30px;
+        font-size: 24px;
+        font-weight: 900;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* Right Side - Form */
+      .form-side {
+        flex: 1;
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .form-header {
+        text-align: center;
+        margin-bottom: 35px;
+      }
+
+      .form-header h2 {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      .form-header p {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-top: 8px;
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      .input-group label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 8px;
+      }
+
+      .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .input-wrapper i {
+        position: absolute;
+        left: 15px;
+        color: var(--text-muted);
+        transition: 0.3s;
+      }
+
+      .input-wrapper input {
+        width: 100%;
+        padding: 12px 15px 12px 45px;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        outline: none;
+        font-size: 15px;
+        transition: all 0.3s;
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      .input-wrapper input:focus {
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+      }
+
+      .input-wrapper input:focus + i {
+        color: var(--primary);
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 15px;
+        left: auto !important;
+        cursor: pointer;
+        color: var(--text-muted);
+      }
+
+      .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        font-size: 14px;
+      }
+
+      .remember-me {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-muted);
+        cursor: pointer;
+      }
+
+      .forgot-password {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .forgot-password:hover {
+        text-decoration: underline;
+      }
+
+      button.btn-login {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 12px;
+        background: var(--primary);
+        color: white;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);
+      }
+
+      button.btn-login:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4);
+      }
+
+      button.btn-login:active {
+        transform: translateY(0);
+      }
+
+      button.btn-login:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+
+      .spinner {
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 0.8s linear infinite;
+        display: none;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .msg {
+        margin-top: 20px;
+        padding: 12px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+        display: none;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .msg.success {
+        background: #dcfce7;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+        display: block;
+      }
+
+      .msg.error {
+        background: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+        display: block;
+      }
+
+      .register-link {
+        text-align: center;
+        margin-top: 25px;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .register-link a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 700;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+        }
+
+        .info-side {
+          display: none;
+        }
+
+        .form-side {
+          padding: 40px 30px;
+        }
+      }
+    </style>
+
+    <!-- <link rel="stylesheet" href="/css/chatbot.css"> -->
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- LEFT: Info -->
+      <div class="info-side">
+        <div class="brand-logo">
+          <i class="fas fa-paper-plane"></i> LoudBoooking
+        </div>
+        <h1>Trải nghiệm lưu trú đẳng cấp & tiện nghi</h1>
+        <p>
+          Đăng nhập để bắt đầu hành trình khám phá những địa điểm lưu trú tuyệt
+          vời nhất, quản lý đơn đặt phòng và nhận ưu đãi độc quyền dành riêng
+          cho bạn.
+        </p>
+      </div>
+
+      <!-- RIGHT: Form -->
+      <div class="form-side">
+        <div class="form-header">
+          <h2>Chào mừng trở lại!</h2>
+          <p>Vui lòng nhập thông tin để đăng nhập</p>
+        </div>
+
+        <div class="input-group">
+          <label for="email">Email</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope"></i>
+            <input
+              type="email"
+              id="email"
+              placeholder="name@company.com"
+              required
+              autocomplete="new-email"
+            />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="password">Mật khẩu</label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock"></i>
+            <input
+              type="password"
+              id="password"
+              placeholder="••••••••"
+              required
+              autocomplete="new-password"
+            />
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="remember" /> Ghi nhớ tôi
+          </label>
+          <a href="#" class="forgot-password">Quên mật khẩu?</a>
+        </div>
+
+        <button class="btn-login" id="btnLogin" onclick="login()">
+          <span id="btnText">Đăng nhập</span>
+          <div class="spinner" id="spinner"></div>
+        </button>
+
+        <div class="msg" id="msg"></div>
+
+        <div class="register-link">
+          Bạn chưa có tài khoản? <a href="register.html">Đăng ký ngay</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function login() {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const msg = document.getElementById("msg");
+
+        // validate
+        if (!email || !password) {
+          msg.className = "msg error";
+          msg.innerText = "Vui lòng nhập email và mật khẩu";
+          return;
+        }
+
+        try {
+          const res = await fetch("http://localhost:8080/api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
+
+          if (!res.ok) {
+            const err = await res.json();
+
+            msg.className = "msg error";
+
+            if (err.message.includes("khóa")) {
+              msg.innerText = "Tài khoản của bạn đã bị khóa. Liên hệ admin!";
+            } else {
+              msg.innerText = err.message || "Email hoặc mật khẩu không đúng";
+            }
+
+            return;
+          }
+
+          const data = await res.json();
+
+          /*
+          Backend trả về dạng:
+          {
+            accessToken: "...",
+            tokenType: "Bearer",
+            user: {
+              id, username, email, phone, role
+            }
+          }
+        */
+
+          // lưu localStoragee
+          localStorage.setItem("accessToken", data.accessToken);
+          localStorage.setItem("refreshToken", data.refreshToken);
+
+          localStorage.setItem("userId", data.userId);
+          localStorage.setItem("username", data.username);
+          localStorage.setItem("email", data.email);
+          localStorage.setItem("role", data.role);
+
+          const role = data.role;
+
+          msg.className = "msg success";
+          msg.innerText = "Đăng nhập thành công!";
+
+          setTimeout(() => {
+            if (data.role === "ADMIN") {
+              window.location.href = "admin/html/dashboard.html";
+            } else if (data.role === "MANAGER") {
+              // thêm dòng này
+              window.location.href = "manager/html/dashboard.html";
+            } else {
+              window.location.href = "user/html/home.html";
+            }
+          }, 800);
+        } catch (error) {
+          msg.className = "msg error";
+          msg.innerText = "Không kết nối được server";
+          console.error(error);
+        }
+      }
+    </script>
+
+    <!-- <script src="/js/chatbot.js" defer></script> -->
+  </body>
+</html>

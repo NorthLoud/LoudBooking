@@ -1,0 +1,1400 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giới thiệu | LoudBooking</title>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --primary: #3570ef;
+        --primary-hover: #4d78ef;
+        --primary-light: #eef2ff;
+        --secondary: #10b981;
+        --accent: #f59e0b;
+        --bg-body: #f8fafc;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --glass-bg: rgba(255, 255, 255, 0.85);
+        --card-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.05),
+          0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        --radius-lg: 24px;
+        --radius-md: 16px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background: var(--bg-body);
+        color: var(--text-main);
+      }
+
+      .brand-logo {
+        font-family: "Outfit", sans-serif;
+      }
+
+      /* HEADER */
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        padding: 16px 60px;
+      }
+
+      .header-container {
+        max-width: 1400px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .brand-logo {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--primary);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .nav-links {
+        display: flex;
+      }
+
+      .nav-links a {
+        color: var(--text-main);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        padding: 10px 16px;
+        border-radius: 30px;
+        transition: 0.3s;
+      }
+
+      .nav-links a:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 18px;
+        border-radius: 40px;
+        background: var(--primary-light);
+        color: var(--primary);
+        cursor: pointer;
+        transition: 0.3s;
+        position: relative;
+        border: 1px solid #dbeafe;
+      }
+
+      .user-profile:hover {
+        background: #dbeafe;
+      }
+
+      .user-avatar-wrapper {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        flex-shrink: 0;
+        font-weight: 800;
+      }
+
+      .user-avatar-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+      }
+
+      .avatar-initials {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+      }
+
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 12px);
+        right: 0;
+        width: 240px;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid #f1f5f9;
+        z-index: 999;
+      }
+
+      .dropdown-item {
+        width: 100%;
+        border: none;
+        background: none;
+        padding: 14px 18px;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-main);
+        transition: 0.3s;
+      }
+
+      .dropdown-item:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .dropdown-item.logout {
+        color: #ef4444;
+        border-top: 1px solid #f1f5f9;
+      }
+
+      /* SEARCH BAR */
+
+      .top-search-section {
+        padding: 30px 60px;
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .search-container {
+        max-width: 1400px;
+        margin: auto;
+        background: white;
+        padding: 15px;
+        border-radius: var(--radius-md);
+        box-shadow: var(--card-shadow);
+
+        display: grid;
+        grid-template-columns: 2fr 1.2fr 1.2fr 1fr 0.9fr;
+        gap: 12px;
+      }
+
+      .search-box {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 12px 18px;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 1px solid transparent;
+      }
+
+      .search-box:hover {
+        border-color: var(--primary);
+        background: white;
+      }
+
+      .search-box label {
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        letter-spacing: 1px;
+      }
+
+      .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-main);
+      }
+
+      .search-box select {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 15px;
+        color: var(--text-main);
+        margin-top: 8px;
+        cursor: pointer;
+      }
+
+      .btn-search {
+        border: none;
+        border-radius: 12px;
+        background: var(--primary);
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn-search:hover {
+        background: var(--primary-hover);
+      }
+
+      .keyword-box {
+        position: relative;
+      }
+
+      .suggestion-item {
+        padding: 14px 18px;
+        cursor: pointer;
+        transition: 0.2s;
+
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .suggestion-item:hover {
+        background: #f8fafc;
+        color: var(--primary);
+      }
+
+      .suggestion-item i {
+        color: var(--primary);
+      }
+      .hotel-suggestions {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+        overflow-y: auto;
+        max-height: 220px;
+
+        z-index: 999;
+        display: none;
+        border: 1px solid #e2e8f0;
+      }
+
+      /* MAIN */
+      .main-container {
+        max-width: 1400px;
+        margin: 40px auto;
+        padding: 0 60px;
+
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 30px;
+      }
+
+      /* FILTER */
+
+      .filter-section {
+        background: white;
+        border-radius: var(--radius-md);
+        padding: 25px;
+        box-shadow: var(--card-shadow);
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+      }
+
+      .filter-title {
+        font-size: 22px;
+        font-weight: 800;
+        margin-bottom: 25px;
+      }
+
+      .filter-group {
+        margin-bottom: 30px;
+      }
+
+      .filter-group h4 {
+        font-size: 15px;
+        margin-bottom: 15px;
+      }
+
+      .filter-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+
+      .filter-item input {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* PRICE RANGE */
+
+      .price-slider-wrapper {
+        margin-top: 10px;
+      }
+
+      .price-values {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+      }
+
+      #priceRange {
+        width: 100%;
+        appearance: none;
+        height: 6px;
+        border-radius: 999px;
+        background: #dbeafe;
+        outline: none;
+      }
+
+      #priceRange::-webkit-slider-thumb {
+        appearance: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--primary);
+        cursor: pointer;
+        border: 4px solid white;
+        box-shadow: 0 4px 10px rgba(53, 112, 239, 0.35);
+        transition: 0.2s;
+      }
+
+      #priceRange::-webkit-slider-thumb:hover {
+        transform: scale(1.08);
+      }
+
+      .price-current {
+        margin-top: 14px;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .price-current strong {
+        color: var(--primary);
+        font-size: 15px;
+      }
+
+      /* RESULT */
+
+      .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+
+      .results-title h2 {
+        font-size: 30px;
+        font-weight: 800;
+      }
+
+      .results-title p {
+        color: var(--text-muted);
+        margin-top: 6px;
+      }
+
+      .sort-box {
+        background: white;
+        padding: 12px 18px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .sort-box select {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-weight: 600;
+      }
+
+      /* HOTEL CARD */
+
+      .hotel-list {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+      }
+
+      .hotel-card {
+        background: white;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        transition: 0.3s;
+        border: 1px solid #f1f5f9;
+      }
+
+      .hotel-card:hover {
+        transform: translateY(-4px);
+      }
+
+      .hotel-image {
+        position: relative;
+        height: 100%;
+      }
+
+      .hotel-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .rating-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--primary);
+        color: white;
+        padding: 8px 14px;
+        border-radius: 10px;
+        font-weight: 800;
+      }
+
+      .hotel-content {
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .hotel-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .hotel-name {
+        font-size: 26px;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+
+      .hotel-location {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+
+      .hotel-description {
+        color: var(--text-muted);
+        line-height: 1.7;
+        font-size: 14px;
+      }
+
+      .hotel-price {
+        text-align: right;
+      }
+
+      .hotel-price span {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .hotel-price h3 {
+        font-size: 32px;
+        color: var(--primary);
+        margin: 10px 0;
+      }
+
+      .btn-view {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 14px 22px;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn-view:hover {
+        background: var(--primary-hover);
+      }
+
+      .hotel-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid #f1f5f9;
+      }
+
+      .hotel-tags {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        background: var(--primary-light);
+        color: var(--primary);
+        padding: 8px 12px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .review {
+        color: var(--secondary);
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      /* RESPONSIVE */
+
+      @media (max-width: 1200px) {
+        .main-container {
+          grid-template-columns: 1fr;
+        }
+
+        .filter-section {
+          position: static;
+        }
+      }
+
+      @media (max-width: 992px) {
+        header,
+        .top-search-section,
+        .main-container {
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+
+        .search-container {
+          grid-template-columns: 1fr;
+        }
+
+        .hotel-card {
+          grid-template-columns: 1fr;
+        }
+
+        .hotel-image {
+          height: 260px;
+        }
+
+        .hotel-top {
+          flex-direction: column;
+        }
+
+        .hotel-price {
+          text-align: left;
+        }
+      }
+
+      .voucher-wrapper {
+        grid-column: 1 / -1;
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 50px;
+        box-shadow: var(--card-shadow);
+        border: 1px solid #e2e8f0;
+      }
+
+      .voucher-header {
+        margin-bottom: 40px;
+      }
+
+      .voucher-header h1 {
+        font-size: 40px;
+        font-weight: 800;
+        margin-bottom: 12px;
+      }
+
+      .voucher-header p {
+        color: var(--text-muted);
+        line-height: 1.8;
+      }
+
+      .voucher-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 24px;
+      }
+
+      .voucher-item {
+        background: #f8fafc;
+        border-radius: 20px;
+        padding: 24px;
+        border: 1px solid #e2e8f0;
+        transition: 0.3s;
+      }
+
+      .voucher-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+      }
+
+      .voucher-code {
+        display: inline-block;
+        background: var(--primary);
+        color: white;
+        font-weight: 800;
+        font-size: 18px;
+        padding: 10px 18px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+      }
+
+      .voucher-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+
+      .voucher-discount {
+        color: var(--secondary);
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+
+      .voucher-expire {
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+
+      .voucher-footer {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .voucher-btn {
+        flex: 1;
+        border: none;
+        border-radius: 12px;
+        padding: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn-detail {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .btn-detail:hover {
+        background: #dbeafe;
+      }
+
+      .btn-copy {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-copy:hover {
+        background: var(--primary-hover);
+      }
+      /* VOUCHER DETAIL MODAL */
+
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.55);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .modal-content {
+        width: 100%;
+        max-width: 800px;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      }
+
+      .modal-header {
+        background: var(--primary);
+        color: white;
+        padding: 28px;
+      }
+
+      .modal-header h2 {
+        font-size: 28px;
+        font-weight: 800;
+      }
+
+      .modal-body {
+        padding: 30px;
+      }
+
+      .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+
+      .detail-item {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 18px;
+        border-radius: 14px;
+      }
+      .detail-label {
+        font-size: 12px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .detail-value {
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .discount-highlight {
+        color: var(--secondary);
+        font-size: 34px;
+        font-weight: 800;
+        margin: 20px 0;
+      }
+
+      .modal-footer {
+        padding: 24px 30px;
+        border-top: 1px solid #e2e8f0;
+        text-align: right;
+      }
+
+      .btn-close {
+        border: none;
+        background: var(--primary);
+        color: white;
+        padding: 12px 22px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .btn-close:hover {
+        background: var(--primary-hover);
+      }
+
+      .voucher-header-content {
+        text-align: center;
+      }
+
+      .voucher-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 18px;
+        border-radius: 30px;
+        font-weight: 700;
+        margin-bottom: 15px;
+      }
+
+      .modal-header h2 {
+        font-size: 26px;
+        margin-bottom: 8px;
+      }
+
+      .modal-header p {
+        opacity: 0.9;
+      }
+      .discount-card {
+        text-align: center;
+        background: linear-gradient(135deg, #eef2ff, #f8fafc);
+        padding: 25px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+      }
+
+      .discount-label {
+        color: var(--text-muted);
+        font-size: 13px;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .discount-highlight {
+        color: var(--secondary);
+        font-size: 42px;
+        font-weight: 800;
+        margin: 0;
+      }
+      .voucher-detail-header {
+        text-align: center;
+        padding: 25px;
+        background: linear-gradient(135deg, #3570ef, #4d78ef);
+        color: white;
+      }
+
+      .voucher-detail-header p {
+        font-size: 12px;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+        opacity: 0.9;
+      }
+
+      .voucher-detail-header h3 {
+        font-size: 28px;
+        font-weight: 800;
+        margin: 0;
+      }
+
+      .voucher-detail-content {
+        padding: 25px;
+      }
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 12px 0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .detail-row:last-child {
+        border-bottom: none;
+      }
+
+      .detail-label {
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .detail-value {
+        font-size: 14px;
+        font-weight: 700;
+        color: #0f172a;
+        text-align: right;
+      }
+
+      .voucher-detail-desc {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8fafc;
+        border-radius: 12px;
+      }
+
+      .voucher-detail-desc h4 {
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+
+      .voucher-detail-desc p {
+        font-size: 14px;
+        color: #64748b;
+        line-height: 1.6;
+      }
+
+      /* SweetAlert container fix */
+      .voucher-detail-modal .swal2-popup {
+        padding: 0 !important;
+        border-radius: 16px;
+        overflow: hidden;
+      }
+    </style>
+
+    <link rel="stylesheet" href="/css/chatbot.css" />
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <header>
+      <div class="header-container">
+        <a href="home.html" class="brand-logo">
+          <i class="fas fa-paper-plane"></i>
+          LoudBooking
+        </a>
+
+        <div class="nav-actions">
+          <nav class="nav-links">
+            <a href="home.html">Trang chủ</a>
+            <a href="introduce.html">Giới thiệu</a>
+            <a href="voucher.html">Khuyến mãi</a>
+            <a href="bill.html">Đặt phòng của tôi</a>
+          </nav>
+
+          <div class="user-profile" onclick="toggleDropdown()">
+            <div class="user-avatar-wrapper">
+              <img id="userAvatar" src="" alt="Avatar" />
+              <div id="userInitials" class="avatar-initials">U</div>
+            </div>
+
+            <span id="buttonusername">Đăng nhập</span>
+
+            <i class="fas fa-chevron-down" style="font-size: 10px"></i>
+
+            <div id="dropdownMenu" class="dropdown-menu">
+              <button
+                class="dropdown-item"
+                onclick="location.href = 'my-account.html'"
+              >
+                <i class="fas fa-user-circle"></i>
+                Hồ sơ của tôi
+              </button>
+
+              <button
+                class="dropdown-item"
+                onclick="location.href = 'bill.html'"
+              >
+                <i class="fas fa-receipt"></i>
+                Đơn đặt phòng
+              </button>
+
+              <button
+                class="dropdown-item"
+                onclick="location.href = 'chat.html'"
+              >
+                <i class="fas fa-comment-dots"></i>
+                Tin nhắn
+              </button>
+
+              <button class="dropdown-item logout" onclick="logoutUser()">
+                <i class="fas fa-sign-out-alt"></i>
+                Đăng xuất
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+
+    <main class="main-container">
+      <div class="voucher-wrapper">
+        <div class="voucher-header">
+          <h1>Khuyến mãi và Voucher</h1>
+          <p>
+            Tổng hợp các chương trình ưu đãi hiện đang áp dụng trên hệ thống
+            LoudBooking.
+          </p>
+        </div>
+
+        <div id="voucherList" class="voucher-grid"></div>
+      </div>
+    </main>
+
+    <div class="modal" id="voucherModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="voucher-header-content">
+            <span class="voucher-badge" id="modalVoucherCode"></span>
+
+            <h2 id="modalTitle"></h2>
+
+            <p>Thông tin chi tiết chương trình khuyến mãi</p>
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <h3 id="modalTitle"></h3>
+
+          <div class="discount-card">
+            <div class="discount-label">Giá trị ưu đãi</div>
+
+            <div id="modalDiscount" class="discount-highlight"></div>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-item">
+              <div class="detail-label">Mã Voucher</div>
+              <div class="detail-value" id="modalCode"></div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-label">Loại giảm giá</div>
+              <div class="detail-value" id="modalType"></div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-label">Ngày bắt đầu</div>
+              <div class="detail-value" id="modalStartDate"></div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-label">Ngày kết thúc</div>
+              <div class="detail-value" id="modalEndDate"></div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-label">Giá trị đơn tối thiểu</div>
+              <div class="detail-value" id="modalMinPrice"></div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-label">Giảm tối đa</div>
+              <div class="detail-value" id="modalMaxDiscount"></div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-label">Số lượng còn lại</div>
+              <div class="detail-value" id="modalRemain"></div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-label">Trạng thái</div>
+              <div class="detail-value" id="modalStatus"></div>
+            </div>
+          </div>
+
+          <div
+            style="
+              margin-top: 24px;
+              padding: 20px;
+              background: #f8fafc;
+              border-radius: 14px;
+            "
+          >
+            <div
+              style="
+                font-size: 13px;
+                color: var(--text-muted);
+                font-weight: 700;
+                text-transform: uppercase;
+                margin-bottom: 10px;
+              "
+            >
+              Thông tin ưu đãi
+            </div>
+
+            <div
+              id="modalDescription"
+              style="line-height: 1.7; color: var(--text-main)"
+            ></div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-close" onclick="closeVoucherModal()">Đóng</button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const API_URL = "http://localhost:8080";
+
+      let allVouchers = [];
+
+      async function loadVouchers() {
+        const container = document.getElementById("voucherList");
+
+        try {
+          const res = await fetch(`${API_URL}/api/vouchers/public`);
+
+          allVouchers = await res.json();
+
+          if (!allVouchers || allVouchers.length === 0) {
+            container.innerHTML = `
+        <div style="
+          grid-column: 1 / -1;
+          text-align:center;
+          padding:60px;
+        ">
+          <i class="fas fa-ticket-alt fa-3x"
+             style="color:#cbd5e1;"></i>
+
+          <h3 style="margin-top:20px;">
+            Hiện chưa có voucher nào
+          </h3>
+        </div>
+      `;
+
+            return;
+          }
+
+          container.innerHTML = allVouchers
+            .map(
+              (v) => `
+
+      <div class="voucher-item">
+
+        <div class="voucher-code">
+          ${v.voucherCode}
+        </div>
+
+        <div class="voucher-title">
+          ${v.title || "Ưu đãi đặt phòng"}
+        </div>
+
+        <div class="voucher-discount">
+          ${
+            v.discountType === "PERCENT"
+              ? `Giảm ${v.discountValue}%`
+              : `Giảm ${Number(v.discountValue).toLocaleString("vi-VN")}đ`
+          }
+        </div>
+
+        <div class="voucher-expire">
+          Hạn sử dụng:
+          ${new Date(v.endDate).toLocaleDateString("vi-VN")}
+        </div>
+
+        <div class="voucher-footer">
+        <button
+            class="voucher-btn btn-detail"
+            onclick="showVoucherDetail(${v.voucherId})"
+        >
+            Xem chi tiết
+        </button>
+        </div>
+
+      </div>
+
+    `,
+            )
+            .join("");
+        } catch (error) {
+          console.error(error);
+
+          container.innerHTML = `
+      <div style="
+        grid-column:1/-1;
+        text-align:center;
+        padding:60px;
+      ">
+        <h3>Không thể tải danh sách voucher</h3>
+
+        <p style="
+          margin-top:10px;
+          color:var(--text-muted);
+        ">
+          ${error.message}
+        </p>
+      </div>
+    `;
+        }
+      }
+
+      function copyVoucherCode(code) {
+        navigator.clipboard.writeText(code);
+
+        alert("Đã sao chép mã: " + code);
+      }
+
+      function showVoucherDetail(voucherId) {
+        const v = allVouchers.find((x) => x.voucherId == voucherId);
+        if (!v) return;
+
+        const discountTxt =
+          Number(v.discountValue).toLocaleString("vi-VN") +
+          (v.discountType === "PERCENT" ? "%" : " VNĐ");
+
+        const minBillTxt = v.minBillAmount
+          ? Number(v.minBillAmount).toLocaleString("vi-VN") + " VNĐ"
+          : "Không giới hạn";
+
+        const maxDiscountTxt = v.maxDiscountAmount
+          ? Number(v.maxDiscountAmount).toLocaleString("vi-VN") + " VNĐ"
+          : "Không giới hạn";
+
+        const startDateTxt = v.startDate
+          ? new Date(v.startDate).toLocaleString("vi-VN")
+          : "Đang cập nhật";
+
+        const endDateTxt = v.endDate
+          ? new Date(v.endDate).toLocaleString("vi-VN")
+          : "Đang cập nhật";
+
+        Swal.fire({
+          html: `
+      <div class="voucher-detail-header">
+        <p>MÃ KHUYẾN MÃI</p>
+        <h3>${v.voucherCode}</h3>
+      </div>
+
+      <div class="voucher-detail-content">
+
+        <div class="detail-row">
+          <span class="detail-label">Tên chương trình</span>
+          <span class="detail-value">${v.title || "Ưu đãi LoudBooking"}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Mức giảm</span>
+          <span class="detail-value">${discountTxt}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Đơn tối thiểu</span>
+          <span class="detail-value">${minBillTxt}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Giảm tối đa</span>
+          <span class="detail-value">${maxDiscountTxt}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Bắt đầu</span>
+          <span class="detail-value">${startDateTxt}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Kết thúc</span>
+          <span class="detail-value">${endDateTxt}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Còn lại</span>
+          <span class="detail-value">
+            ${(v.quantity || 0) - (v.usedCount || 0)}
+          </span>
+        </div>
+
+        <div class="voucher-detail-desc">
+          <h4>Mô tả</h4>
+          <p>
+            ${
+              v.description ||
+              "Áp dụng cho khách hàng đặt phòng trực tuyến tại LoudBooking."
+            }
+          </p>
+        </div>
+
+      </div>
+    `,
+          showCloseButton: true,
+          showConfirmButton: false,
+          width: 520,
+          customClass: {
+            popup: "voucher-detail-modal",
+          },
+        });
+      }
+
+      function closeVoucherModal() {
+        document.getElementById("voucherModal").style.display = "none";
+      }
+      document.addEventListener("DOMContentLoaded", loadVouchers);
+    </script>
+    <script>
+      function toggleDropdown() {
+        const menu = document.getElementById("dropdownMenu");
+
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      }
+
+      window.onclick = (e) => {
+        if (!e.target.closest(".user-profile")) {
+          const menu = document.getElementById("dropdownMenu");
+
+          if (menu) {
+            menu.style.display = "none";
+          }
+        }
+      };
+
+      function logoutUser() {
+        localStorage.clear();
+        window.location.href = "login.html";
+      }
+
+      function loadUserInfo() {
+        const username = localStorage.getItem("username");
+        const avatar = localStorage.getItem("avatar");
+
+        const userAvatar = document.getElementById("userAvatar");
+        const userInitials = document.getElementById("userInitials");
+
+        if (username) {
+          document.getElementById("buttonusername").innerText = username;
+
+          const initials = username
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .substring(0, 2)
+            .toUpperCase();
+
+          userInitials.innerText = initials;
+        }
+
+        if (avatar && avatar !== "null" && avatar !== "undefined") {
+          userAvatar.src = avatar.startsWith("http")
+            ? avatar
+            : `${API_URL}${avatar}`;
+
+          userAvatar.style.display = "block";
+          userInitials.style.display = "none";
+
+          userAvatar.onerror = () => {
+            userAvatar.style.display = "none";
+            userInitials.style.display = "flex";
+          };
+        } else {
+          userAvatar.style.display = "none";
+          userInitials.style.display = "flex";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadUserInfo();
+        const priceRange = document.getElementById("priceRange");
+        const priceCurrentValue = document.getElementById("priceCurrentValue");
+
+        priceRange.addEventListener("input", () => {
+          const value = Number(priceRange.value);
+
+          priceCurrentValue.innerText = value.toLocaleString("vi-VN") + "đ";
+
+          filterHotelsBySidebar();
+        });
+        document
+          .getElementById("sortSelect")
+          .addEventListener("change", sortHotels);
+        document
+          .querySelectorAll(".rating-filter, .brand-filter")
+          .forEach((checkbox) => {
+            checkbox.addEventListener("change", filterHotelsBySidebar);
+          });
+      });
+    </script>
+
+    <script src="/js/chatbot.js" defer></script>
+  </body>
+</html>
